@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificados I'M ROMA — Marcas desde la Raíz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --midnight: #0D0D1A;
+      --white: #FFFFFF;
+      --violet-core: #4C3AAF;
+      --violet-mid: #7B62D4;
+      --violet-pale: #EAE5FF;
+      --gray-mid: #8B8BA8;
+      --font-display: 'Cinzel', serif;
+      --font-body: 'Montserrat', sans-serif;
+      --radius-lg: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      background: #ececef;
+      min-height: 100vh;
+      padding: 40px 24px;
+      color: var(--midnight);
+    }
+    h1 {
+      font-family: var(--font-display);
+      font-size: 28px;
+      text-align: center;
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+    .sub {
+      text-align: center;
+      font-size: 13px;
+      color: var(--gray-mid);
+      margin-bottom: 40px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      border: 1px solid var(--violet-pale);
+      border-left: 3px solid var(--violet-core);
+      text-decoration: none;
+      color: inherit;
+      transition: box-shadow 0.2s ease;
+    }
+    .card:hover { box-shadow: 0 8px 24px rgba(76, 58, 175, 0.15); }
+    .card .num {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--violet-mid);
+      margin-bottom: 8px;
+    }
+    .card h2 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+    .card p {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--gray-mid);
+      margin-bottom: 16px;
+    }
+    .card .link {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--violet-core);
+    }
+  </style>
+</head>
+<body>
+  <h1>Certificados I'M ROMA</h1>
+  <p class="sub">Dos talleres · Dos certificados independientes</p>
+  <div class="grid">
+    <a class="card" href="certificado-marcas-desde-la-raiz.html">
+      <p class="num">Taller 1</p>
+      <h2>Marcas desde la Raíz</h2>
+      <p>4 clases virtuales · Marketing consciente · Mentoría 1:1 · Mar & Jue 7–9 PM</p>
+      <span class="link">Generar certificado →</span>
+    </a>
+    <a class="card" href="certificado-desde-la-raiz-con-ia.html">
+      <p class="num">Taller 2</p>
+      <h2>Desde la Raíz, con IA</h2>
+      <p>2 sesiones · Sábado 25 julio · Imágenes, avatares, videos y animaciones · App con Google AI Studio</p>
+      <span class="link">Generar certificado →</span>
+    </a>
+  </div>
+</body>
+</html>

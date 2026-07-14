@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marcas desde la Raíz · I'M ROMA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --midnight: #0D0D1A;
+      --off-white: #F7F6FF;
+      --white: #FFFFFF;
+      --deep-violet: #2A1F5C;
+      --violet-core: #4C3AAF;
+      --violet-mid: #7B62D4;
+      --violet-light: #B8A4F0;
+      --violet-pale: #EAE5FF;
+      --gray-mid: #8B8BA8;
+      --font-display: 'Cinzel', serif;
+      --font-body: 'Montserrat', sans-serif;
+      --font-accent: 'Cormorant Garamond', serif;
+      --radius-sm: 4px;
+      --radius-lg: 12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font-body);
+      background: var(--white);
+      color: var(--midnight);
+    }
+
+    .deck { width: 100vw; height: 100vh; position: relative; }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(32px);
+      transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0);
+      z-index: 1;
+    }
+
+    /* ── Layouts ── */
+    .slide-hero {
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 64px 80px;
+      text-align: center;
+    }
+
+    .slide-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, var(--violet-mid) 1px, transparent 1px);
+      background-size: 56px 56px;
+      opacity: 0.04;
+      pointer-events: none;
+    }
+
+    .slide-class {
+      background: var(--off-white);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      overflow: hidden;
+    }
+
+    .slide-class.dark {
+      background: var(--midnight);
+      color: var(--white);
+    }
+
+    .slide-content {
+      padding: 48px 48px 88px 72px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+      height: 100%;
+      max-width: 860px;
+    }
+
+    .slide-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 56px;
+      background: var(--white);
+      border-left: 1px solid var(--violet-pale);
+      min-width: 280px;
+      max-width: 340px;
+    }
+
+    .slide-class.dark .slide-logo {
+      background: rgba(20, 20, 40, 0.5);
+      border-left-color: rgba(123, 98, 212, 0.2);
+    }
+
+    .slide-logo img {
+      width: 100%;
+      max-width: 220px;
+      height: auto;
+      object-fit: contain;
+      position: sticky;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    /* ── Typography ── */
+    .logo-main {
+      width: min(300px, 50vw);
+      height: auto;
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .kicker {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--violet-mid);
+      margin-bottom: 12px;
+    }
+
+    .slide-class.dark .kicker { color: var(--violet-light); }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4.5vw, 48px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: clamp(26px, 3.2vw, 32px);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--gray-mid);
+      margin-bottom: 28px;
+      max-width: 560px;
+    }
+
+    .slide-class.dark .subtitle { color: var(--violet-light); }
+
+    .quote {
+      font-family: var(--font-accent);
+      font-style: italic;
+      font-size: clamp(18px, 2.2vw, 22px);
+      line-height: 1.5;
+      color: var(--deep-violet);
+      max-width: 640px;
+    }
+
+    .slide-class.dark .quote { color: var(--violet-light); }
+
+    .accent-bar {
+      width: 48px;
+      height: 3px;
+      background: var(--violet-core);
+      margin: 28px auto 0;
+      border-radius: var(--radius-sm);
+    }
+
+    .class-num {
+      font-family: var(--font-display);
+      font-size: clamp(64px, 10vw, 96px);
+      font-weight: 700;
+      color: var(--violet-pale);
+      line-height: 1;
+      margin-bottom: 8px;
+      opacity: 0.7;
+    }
+
+    .slide-class.dark .class-num { color: rgba(123, 98, 212, 0.2); }
+
+    .tag {
+      display: inline-block;
+      background: var(--violet-pale);
+      color: var(--deep-violet);
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 16px;
+      width: fit-content;
+    }
+
+    .tag.tag-class-1 {
+      background: var(--violet-pale);
+      color: var(--deep-violet);
+      border: 1.5px solid var(--violet-mid);
+    }
+
+    .tag.tag-class-2 {
+      background: var(--violet-core);
+      color: var(--white);
+      border: 1.5px solid var(--violet-core);
+    }
+
+    .slide-class.dark .tag {
+      background: rgba(76, 58, 175, 0.25);
+      color: var(--violet-light);
+    }
+
+    .slide-class.dark .tag.tag-class-1 {
+      background: rgba(123, 98, 212, 0.2);
+      color: var(--violet-light);
+      border-color: var(--violet-mid);
+    }
+
+    .slide-class.dark .tag.tag-class-2 {
+      background: var(--violet-core);
+      color: var(--white);
+      border-color: var(--violet-light);
+    }
+
+    .bullet-list {
+      list-style: none;
+      margin: 20px 0;
+      max-width: 600px;
+    }
+
+    .bullet-list li {
+      font-size: 14px;
+      line-height: 1.55;
+      padding: 12px 0 12px 28px;
+      position: relative;
+      border-bottom: 1px solid var(--violet-pale);
+    }
+
+    .slide-class.dark .bullet-list li {
+      color: var(--violet-light);
+      border-bottom-color: rgba(123, 98, 212, 0.2);
+    }
+
+    .bullet-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--violet-core);
+    }
+
+    .slide-class.dark .bullet-list li::before { background: var(--violet-mid); }
+    .bullet-list li strong { font-weight: 600; }
+    .slide-class.dark .bullet-list li strong { color: var(--white); }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 20px;
+      max-width: 620px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      border: 0.5px solid var(--violet-pale);
+      border-left: 3px solid var(--violet-core);
+    }
+
+    .slide-class.dark .card {
+      background: rgba(76, 58, 175, 0.12);
+      border-color: rgba(123, 98, 212, 0.25);
+      border-left-color: var(--violet-mid);
+    }
+
+    .card .label {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--violet-mid);
+      margin-bottom: 8px;
+    }
+
+    .slide-class.dark .card .label { color: var(--violet-light); }
+
+    .card h3 {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .slide-class.dark .card h3 { color: var(--white); }
+
+    .card p {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--gray-mid);
+    }
+
+    .slide-class.dark .card p { color: var(--violet-light); }
+
+    .exercise-box {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 22px 26px;
+      border-left: 3px solid var(--violet-core);
+      max-width: 600px;
+      margin-top: 24px;
+    }
+
+    .slide-class.dark .exercise-box {
+      background: rgba(76, 58, 175, 0.15);
+      border-left-color: var(--violet-mid);
+    }
+
+    .exercise-box .label {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--violet-core);
+      margin-bottom: 10px;
+    }
+
+    .slide-class.dark .exercise-box .label { color: var(--violet-light); }
+
+    .exercise-box p {
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .slide-class.dark .exercise-box p { color: var(--violet-light); }
+
+    .body-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--gray-mid);
+      max-width: 620px;
+      margin-bottom: 20px;
+    }
+
+    .slide-class.dark .body-text { color: var(--violet-light); }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--violet-mid);
+      margin: 20px 0 12px;
+    }
+
+    .aida-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      max-width: 680px;
+      margin-top: 8px;
+    }
+
+    .aida-item {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 18px 16px;
+      border-top: 3px solid var(--violet-core);
+      text-align: center;
+    }
+
+    .aida-item .letter {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--violet-core);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .aida-item strong {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+
+    .aida-item span {
+      font-size: 11px;
+      line-height: 1.45;
+      color: var(--gray-mid);
+    }
+
+    .route-list {
+      list-style: none;
+      max-width: 620px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .route-list li {
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 14px 18px;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border-left: 3px solid var(--violet-core);
+    }
+
+    .slide-class.dark .route-list li {
+      background: rgba(76, 58, 175, 0.12);
+      color: var(--violet-light);
+      border-left-color: var(--violet-mid);
+    }
+
+    .route-list li strong { font-weight: 600; }
+    .slide-class.dark .route-list li strong { color: var(--white); }
+
+    .speaker-name {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 3vw, 30px);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .speaker-role {
+      font-size: 12px;
+      color: var(--gray-mid);
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .reflection-box {
+      background: var(--violet-pale);
+      border-radius: var(--radius-lg);
+      padding: 22px 26px;
+      max-width: 620px;
+      margin-top: 16px;
+      text-align: left;
+    }
+
+    .reflection-box ul {
+      list-style: none;
+      margin-top: 10px;
+    }
+
+    .reflection-box li {
+      font-size: 14px;
+      line-height: 1.55;
+      padding: 8px 0 8px 20px;
+      position: relative;
+      color: var(--deep-violet);
+    }
+
+    .reflection-box li::before {
+      content: '?';
+      position: absolute;
+      left: 0;
+      font-weight: 600;
+      color: var(--violet-core);
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      max-width: 680px;
+      margin-top: 16px;
+    }
+
+    .compare-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      border-left: 3px solid var(--violet-core);
+    }
+
+    .compare-card h3 {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .compare-card ul {
+      list-style: none;
+    }
+
+    .compare-card li {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--gray-mid);
+      padding: 5px 0;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .compare-card li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 11px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--violet-mid);
+    }
+
+    .anatomy-block {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      border-left: 3px solid var(--violet-core);
+      margin-bottom: 10px;
+      max-width: 640px;
+    }
+
+    .anatomy-block h3 {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .anatomy-block li {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--gray-mid);
+      margin-left: 16px;
+      margin-bottom: 4px;
+    }
+
+    .anatomy-block li strong { color: var(--midnight); font-weight: 600; }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      max-width: 680px;
+      margin-top: 12px;
+    }
+
+    .tool-item {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 14px 18px;
+      border-left: 3px solid var(--violet-mid);
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--gray-mid);
+    }
+
+    .tool-item strong {
+      display: block;
+      font-size: 13px;
+      color: var(--midnight);
+      margin-bottom: 4px;
+    }
+
+    .steps-list {
+      list-style: none;
+      max-width: 640px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .steps-list li {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      border-left: 3px solid var(--violet-core);
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--gray-mid);
+    }
+
+    .steps-list li strong { color: var(--midnight); }
+
+    .slide-content.top { justify-content: flex-start; padding-top: 36px; }
+
+    .markdown-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      max-width: 680px;
+      margin-top: 14px;
+    }
+
+    .markdown-item {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 14px 18px;
+      border-left: 3px solid var(--violet-mid);
+    }
+
+    .markdown-item code {
+      display: block;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 12px;
+      color: var(--deep-violet);
+      background: var(--violet-pale);
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+    }
+
+    .markdown-item span {
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--gray-mid);
+    }
+
+    .markdown-note {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      border-left: 3px solid var(--violet-core);
+      max-width: 640px;
+      margin-top: 12px;
+    }
+
+    .markdown-note p {
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--gray-mid);
+    }
+
+    .markdown-note strong { color: var(--midnight); }
+
+    /* ── Nav ── */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 32px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+      border-top: 1px solid var(--violet-pale);
+    }
+
+    .nav-brand {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--violet-core);
+    }
+
+    .nav-controls { display: flex; align-items: center; gap: 16px; }
+
+    .nav-btn {
+      background: transparent;
+      border: 1.5px solid var(--violet-mid);
+      color: var(--midnight);
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      background: var(--violet-core);
+      border-color: var(--violet-core);
+      color: var(--white);
+    }
+
+    .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .slide-counter {
+      font-size: 12px;
+      color: var(--gray-mid);
+      min-width: 48px;
+      text-align: center;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--violet-core);
+      transition: width 0.3s ease;
+      z-index: 100;
+    }
+
+    @media (max-width: 900px) {
+      .slide-class { grid-template-columns: 1fr; }
+      .slide-logo {
+        order: -1;
+        min-width: unset;
+        max-width: unset;
+        padding: 24px;
+        border-left: none;
+        border-bottom: 1px solid var(--violet-pale);
+      }
+      .slide-logo img { max-width: 160px; position: static; transform: none; }
+      .slide-content { padding: 32px 24px 88px; }
+      .card-grid,
+      .aida-grid,
+      .compare-grid,
+      .tools-grid,
+      .markdown-grid { grid-template-columns: 1fr; }
+      .slide-hero { padding: 48px 24px 88px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar" id="progress"></div>
+
+  <div class="deck" id="deck">
+
+    <!-- SLIDE 1: Introducción -->
+    <section class="slide slide-hero active">
+      <img class="logo-main" src="Roma- png_Mesa de trabajo 1 copia 2.png" alt="I'M ROMA Creative Ecosystem">
+      <span class="kicker">Taller · Marcas desde la Raíz · Clases 1 y 2</span>
+      <p class="speaker-name">Diana Muñoz</p>
+      <p class="speaker-role">Especialista en Redes Sociales y Creación de Contenido</p>
+      <p class="quote">"Es hora de estructurar, resignificar y crear estrategias para que tu marca hable desde tu esencia."</p>
+      <div class="accent-bar"></div>
+    </section>
+
+    <!-- SLIDE 2: Marcas desde la Raíz -->
+    <section class="slide slide-class">
+      <div class="slide-content">
+        <span class="tag tag-class-1">Clase 1</span>
+        <h2>Marcas desde la Raíz</h2>
+        <p class="body-text">Un taller diseñado para trabajar tus redes sociales con estrategia y entender el mapa del ecosistema digital.</p>
+        <div class="reflection-box">
+          <p class="section-label" style="margin-top:0;">Reflexión inicial</p>
+          <ul>
+            <li>¿En qué momento de su vida crees que se encuentran tus redes sociales?</li>
+            <li>¿Cuál fue el objetivo con el que iniciaste y cuál es el objetivo en el que te encuentras en este momento?</li>
+          </ul>
+        </div>
+      </div>
+      <aside class="slide-logo">
+        <img src="Roma- png_Mesa de trabajo 1 copia 2.png" alt="I'M ROMA">
+      </aside>
+    </section>
+
+    <!-- SLIDE 3: El Mapa de las Redes Sociales -->
+    <section class="slide slide-class">
+      <div class="slide-content top">
+        <span class="tag tag-class-1">Clase 1</span>
+        <h2>El mapa de las redes sociales</h2>
+        <p class="body-text">Cada plataforma tiene un lenguaje y un propósito diferente dentro de tu ecosistema.</p>
+        <div class="card-grid">
+          <div class="card">
+            <div class="label">Instagram</div>
+            <h3>La vitrina estética</h3>
+            <p>Comunidad y estatus. Catálogo visual donde el algoritmo premia engagement, interacción y estética.</p>
+          </div>
+          <div class="card">
+            <div class="label">TikTok</div>
+            <h3>Motor de descubrimiento</h3>
+            <p>Basado en intereses, no en seguidores. Entretenimiento, tendencias y narrativas dinámicas.</p>
+          </div>
+          <div class="card">
+            <div class="label">Facebook</div>
+            <h3>Pilar de confianza</h3>
+            <p>Comunidades y validación. Público maduro, ventas directas, alcance local y retargeting.</p>
+          </div>
+          <div class="card">
+            <div class="label">LinkedIn</div>
+            <h3>Autoridad y networking</h3>
+            <p>Conexiones de valor, trayectoria profesional y posicionamiento B2B.</p>
+          </div>
+        </div>
+      </div>
+      <aside class="slide-logo">
+        <img src="Roma- png_Mesa de trabajo 1 copia 2.png" alt="I'M ROMA">
+      </aside>
+    </section>
+
+    <!-- SLIDE 4: Anatomía del Contenido -->
+    <section class="slide slide-class">
+      <div class="slide-content top">
+        <span class="tag tag-class-1">Clase 1</span>
+        <h2>Anatomía del contenido</h2>
+        <p class="body-text">La estructura detrás de lo que publicamos.</p>
+        <div class="anatomy-block">
+          <h3>Anatomía de un Reel</h3>
+          <ul>
+            <li><strong>Hook (Gancho):</strong> Los primeros 1 a 3 segundos que capturan la atención (visual o auditivo).</li>
+            <li><strong>Retención (Cuerpo):</strong> Desarrollo dinámico de la idea para evitar el scroll.</li>
+            <li><strong>CTA:</strong> Instrucción final — "Guarda este video", "Comenta X".</li>
+          </ul>
+        </div>
+        <div class="anatomy-block">
+          <h3>Anatomía de un Carrusel</h3>
+          <ul>
+            <li><strong>Portada:</strong> Promesa clara o título magnético.</li>
+            <li><strong>Desarrollo:</strong> Información digerible y fácil de leer.</li>
+            <li><strong>Cierre:</strong> Diseñado para generar guardados o compartidos.</li>
+          </ul>
+        </div>
+        <div class="anatomy-block">
+          <h3>Anatomía de un Post Fijo</h3>
+          <ul>
+            <li><strong>Elemento visual:</strong> Fotografía limpia o diseño de alto impacto.</li>
+            <li><strong>Copy:</strong> Pie de foto que expande el contexto y guía al objetivo.</li>
+          </ul>
+        </div>
+      </div>
+      <aside class="slide-logo">
+        <img src="Roma- png_Mesa de trabajo 1 copia 2.png" alt="I'M ROMA">
+      </aside>
+    </section>
+
+    <!-- SLIDE 5: Instagram vs. TikTok -->
+    <section class="slide slide-class">
+      <div class="slide-content">
+        <span class="tag tag-class-1">Clase 1</span>
+        <h2>Instagram vs. TikTok</h2>
+        <p class="subtitle">No es el mismo video — es la forma en que lo cuentas.</p>
+        <div class="compare-grid">
+          <div class="compare-card">
+            <h3>Instagram · Estatus y estética</h3>
+            <ul>
+              <li>Estilo gráfico cuidado y coherente.</li>
+              <li>Calidad, inspiración y formato editorial limpio.</li>
+              <li>Se prioriza lo visualmente atractivo y aspiracional.</li>
+            </ul>
+          </div>
+          <div class="compare-card">
+            <h3>TikTok · Storytelling y autenticidad</h3>
+            <ul>
+              <li>Historias, anécdotas y conexión real.</li>
+              <li>Contenido crudo, directo y conversacional.</li>
+              <li>Se prioriza la narrativa sobre la perfección visual.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <aside class="slide-logo">
+        <img src="Roma- png_Mesa de trabajo 1 copia 2.png" alt="I'M ROMA">
+      </aside>
+    </section>
+
+    <!-- SLIDE 6: La Estética como Base -->
+    <section class="slide slide-class">
+      <div class="slide-content top">
+        <span class="tag tag-class-1">Clase 1</span>
+        <h2>La estética como base de tu marca</h2>
+        <p class="body-text">La estética no es solo "bonito" — es el lenguaje visual que transmite tu esencia, genera confianza y te diferencia.</p>
+        <div class="card-grid">
+          <div class="card">
+            <div class="label">Tipografías</div>
+            <h3>La voz escrita</h3>
+            <p>¿Clásica, moderna, cercana o de autoridad?</p>
+          </div>
+          <div class="card">
+            <div class="label">Paleta de colores</div>
+            <h3>Emoción visual</h3>
+            <p>Tonos coherentes y buen contraste.</p>
+          </div>
+          <div class="card">
+            <div class="label">Jerarquía visual</div>
+            <h3>Guiar la mirada</h3>
+            <p>Organiza la información para dirigir el ojo del usuario.</p>
+          </div>
+          <div class="card">
+            <div class="label">Estilo gráfico</div>
+            <h3>Tu identidad</h3>
+            <p>Minimalista, editorial, limpio o vintage.</p>
+          </div>
+        </div>
+      </div>
+      <aside class="slide-logo">
+        <img src="Roma- png_Mesa de trabajo 1 copia 2.png" alt="I'M ROMA">
+      </aside>
+    </section>
+
+    <!-- SLIDE 7: El Método AIDA -->
+    <section class="slide slide-class">
+      <div class="slide-content">
+        <span class="tag tag-class-1">Clase 1</span>
+        <h2>El método AIDA</h2>
+        <p class="subtitle">El viaje de tu contenido — cada pieza debe estructurarse bajo este modelo.</p>
+        <div class="aida-grid">
+          <div class="aida-item">
+            <div class="letter">A</div>
+            <strong>Atención</strong>
+            <span>Capturar la mirada en los primeros segundos (Hook).</span>
+          </div>
+          <div class="aida-item">
+            <div class="letter">I</div>
+            <strong>Interés</strong>
+            <span>Retener conectando con su necesidad o problema.</span>
+          </div>
+          <div class="aida-item">
+            <div class="letter">D</div>
+            <strong>Deseo</strong>
+            <span>Mostrar el valor y la solución de tu marca.</span>
+          </div>
+          <div class="aida-item">
+            <div class="letter">A</div>
+            <strong>Acción</strong>
+            <span>El llamado final claro (CTA).</span>
+          </div>
+        </div>
+      </div>
+      <aside class="slide-logo">
+        <img src="Roma- png_Mesa de trabajo 1 copia 2.png" alt="I'M ROMA">
+      </aside>
+    </section>
+
+    <!-- SLIDE 8: Nuestra Ruta en este Taller -->
+    <section class="slide slide-class dark">
+      <div class="slide-content top">
+        <span class="tag tag-class-1">Clase 1</span>
+        <h2>Nuestra ruta en este taller</h2>
+        <p class="body-text">Reconocer el posicionamiento real de tu marca hoy para trazar la ruta de crecimiento.</p>
+        <ul class="route-list">
+          <li><strong>Inteligencia Artificial (IA)</strong> — Claude y ChatGPT como aliados estratégicos.</li>
+          <li><strong>Meta Business Suite</strong> — Centro de operaciones para gestionar y programar.</li>
+          <li><strong>Herramientas de ejecución</strong> — Canva para diseño fluido y CapCut para video.</li>
+          <li><strong>Plan de trabajo</strong> — Cronograma y sistemas de contenido propios.</li>
+          <li><strong>Investigación estratégica</strong> — Público objetivo y mapeo de competencia.</li>
+        </ul>
+      </div>
+      <aside class="slide-logo">
+        <img src="Roma white- png.png" alt="I'M ROMA">
+      </aside>
+    </section>
+
+    <!-- SLIDE 9: Puente — inicio Clase 2 -->
+    <section class="slide slide-class dark">
+      <div class="slide-content">
+        <div class="class-num">02</div>
+        <span class="tag tag-class-2">Clase 2</span>
+        <h2>Empieza la Clase 2</h2>
+        <p class="subtitle">Evaluación, intención y creación fluida con IA.</p>
+        <p class="quote">Antes de abrir herramientas, auditamos lo que ya tenemos — y luego convertimos la estrategia en piezas reales.</p>
+      </div>
+      <aside class="slide-logo">
+        <img src="Roma white- png.png" alt="I'M ROMA">
+      </aside>
+    </section>
+
+    <!-- SLIDE 10: Evaluación Previa -->
+    <section class="slide slide-class">
+      <div class="slide-content">
+        <span class="tag tag-class-2">Clase 2</span>
+        <h2>Evaluación previa</h2>
+        <p class="subtitle">Antes de abrir cualquier herramienta, auditamos lo que ya tenemos. ¿Cómo se ve tu marca hoy?</p>
+        <p class="section-label">Preguntas de análisis</p>
+        <ul class="bullet-list">
+          <li><strong>Identidad visual</strong> — ¿Cómo luce tu logo? ¿Colores y tipografías alineados con lo definido?</li>
+          <li><strong>Tono de comunicación</strong> — ¿Tu voz se siente auténtica o forzada?</li>
+          <li><strong>Coherencia</strong> — ¿Lo que creas hoy refleja la esencia y calidad de tu producto o servicio?</li>
+        </ul>
+      </div>
+      <aside class="slide-logo">
+        <img src="Roma- png_Mesa de trabajo 1 copia 2.png" alt="I'M ROMA">
+      </aside>
+    </section>
+
+    <!-- SLIDE 11: La Intención Detrás del Contenido -->
+    <section class="slide slide-class dark">
+      <div class="slide-content">
+        <span class="tag tag-class-2">Clase 2</span>
+        <h2>La intención detrás del contenido</h2>
+        <p class="subtitle">No se trata de llenar espacios en un calendario — se trata de tener dirección.</p>
+        <p class="quote">"A la hora de crear contenido, no solo pienso en ¿qué es lo que quiero comunicar?, sino: ¿qué resultados exactos puede traerme esto?"</p>
+        <p class="section-label">El impacto de ser específicos</p>
+        <p class="body-text">Un solo contenido no le habla a todo el mundo. Cada pieza puede tocar diferentes avatares (perfiles de clientes ideales). Un contenido específico atrae a un público específico — si le hablas a todos, no conectas con nadie.</p>
+      </div>
+      <aside class="slide-logo">
+        <img src="Roma white- png.png" alt="I'M ROMA">
+      </aside>
+    </section>
+
+    <!-- SLIDE 12: Formatos Markdown -->
+    <section class="slide slide-class">
+      <div class="slide-content top">
+        <span class="tag tag-class-2">Clase 2</span>
+        <h2>Formatos Markdown</h2>
+        <p class="body-text">Un lenguaje de texto simple para estructurar ideas, prompts y guías de marca — ideal para trabajar con Claude y otras IAs.</p>
+        <div class="markdown-grid">
+          <div class="markdown-item">
+            <code># Título</code>
+            <span>Encabezado principal — organiza secciones del prompt o brief.</span>
+          </div>
+          <div class="markdown-item">
+            <code>## Subtítulo</code>
+            <span>Jerarquía secundaria — divide bloques de información.</span>
+          </div>
+          <div class="markdown-item">
+            <code>**negrita**</code>
+            <span>Énfasis en palabras clave: tono, CTA o conceptos centrales.</span>
+          </div>
+          <div class="markdown-item">
+            <code>*cursiva*</code>
+            <span>Citas, matices de voz o referencias de marca.</span>
+          </div>
+          <div class="markdown-item">
+            <code>- ítem de lista</code>
+            <span>Viñetas para ideas, pasos o características del contenido.</span>
+          </div>
+          <div class="markdown-item">
+            <code>&gt; cita destacada</code>
+            <span>Bloque de frase clave o mensaje principal de la pieza.</span>
+          </div>
+        </div>
+        <div class="markdown-note">
+          <p><strong>Markdown de estilo gráfico:</strong> un documento estructurado con paleta, tipografías, tono y estilo visual de tu marca — para que la IA entienda cómo debe verse y sonar tu contenido antes de crear.</p>
+        </div>
+      </div>
+      <aside class="slide-logo">
+        <img src="Roma- png_Mesa de trabajo 1 copia 2.png" alt="I'M ROMA">
+      </aside>
+    </section>
+
+    <!-- SLIDE 13: El Flujo Estratégico Claude + Canva -->
+    <section class="slide slide-class">
+      <div class="slide-content top">
+        <span class="tag tag-class-2">Clase 2</span>
+        <h2>El flujo estratégico: Claude + Canva</h2>
+        <p class="body-text">Tomamos el cronograma de trabajo y lo convertimos en piezas visuales reales.</p>
+        <ol class="steps-list">
+          <li><strong>Paso 1 · La estrategia en Claude.</strong> Estructurar un prompt sencillo para que Claude entienda la voz de tu marca y aterrice ideas del cronograma en textos y guiones claros.</li>
+          <li><strong>Paso 2 · La ejecución en Canva.</strong> Llevar esos textos al diseño aplicando paleta, tipografías y estilo gráfico definidos.</li>
+          <li><strong>Paso 3 · Fluidez.</strong> Técnicas para trabajar rápido en Canva sin perder dirección visual ni estética.</li>
+        </ol>
+      </div>
+      <aside class="slide-logo">
+        <img src="Roma- png_Mesa de trabajo 1 copia 2.png" alt="I'M ROMA">
+      </aside>
+    </section>
+
+    <!-- SLIDE 14: Ecosistema de IA -->
+    <section class="slide slide-class">
+      <div class="slide-content top">
+        <span class="tag tag-class-2">Clase 2</span>
+        <h2>Ecosistema de inteligencia artificial</h2>
+        <p class="body-text">Herramientas para crear copys, imágenes y videos que potencien tu estrategia.</p>
+        <div class="tools-grid">
+          <div class="tool-item"><strong>Claude</strong>Textos estratégicos, análisis y estructuración con tono natural.</div>
+          <div class="tool-item"><strong>ChatGPT</strong>Lluvias de ideas, iteración rápida y estructuras base.</div>
+          <div class="tool-item"><strong>Gemini</strong>Análisis de datos, investigación y textos integrados.</div>
+          <div class="tool-item"><strong>Leonardo.ai</strong>Imágenes de alta calidad y estética cuidada.</div>
+          <div class="tool-item"><strong>Pika</strong>Generación y animación de video desde texto o imágenes.</div>
+          <div class="tool-item"><strong>Flow Labs</strong>Animaciones fluidas y dinamismo visual.</div>
+        </div>
+      </div>
+      <aside class="slide-logo">
+        <img src="Roma- png_Mesa de trabajo 1 copia 2.png" alt="I'M ROMA">
+      </aside>
+    </section>
+
+  </div>
+
+  <nav class="nav-bar">
+    <span class="nav-brand">I'M ROMA</span>
+    <div class="nav-controls">
+      <button class="nav-btn" id="prevBtn" aria-label="Anterior" disabled>&#8592;</button>
+      <span class="slide-counter" id="counter">1 / 14</span>
+      <button class="nav-btn" id="nextBtn" aria-label="Siguiente">&#8594;</button>
+    </div>
+  </nav>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counter = document.getElementById('counter');
+    const progress = document.getElementById('progress');
+    let current = 0;
+    const total = slides.length;
+
+    function goTo(index) {
+      if (index < 0 || index >= total) return;
+      slides[current].classList.remove('active');
+      current = index;
+      slides.forEach((s, i) => s.classList.toggle('active', i === current));
+      counter.textContent = `${current + 1} / ${total}`;
+      progress.style.width = `${((current + 1) / total) * 100}%`;
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === total - 1;
+    }
+
+    prevBtn.addEventListener('click', () => goTo(current - 1));
+    nextBtn.addEventListener('click', () => goTo(current + 1));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+      else if (e.key === 'Home') goTo(0);
+      else if (e.key === 'End') goTo(total - 1);
+    });
+
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) diff > 0 ? goTo(current + 1) : goTo(current - 1);
+    });
+
+    goTo(0);
+  </script>
+
+</body>
+</html>

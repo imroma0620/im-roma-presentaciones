@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I'M ROMA — Taller Creativo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --midnight: #0D0D1A;
+      --navy-dark: #141428;
+      --off-white: #F7F6FF;
+      --white: #FFFFFF;
+      --deep-violet: #2A1F5C;
+      --violet-core: #4C3AAF;
+      --violet-mid: #7B62D4;
+      --violet-light: #B8A4F0;
+      --violet-pale: #EAE5FF;
+      --cobalt: #1A2F6E;
+      --blue-core: #2449C0;
+      --blue-light: #5B82E8;
+      --blue-pale: #C8D8FF;
+      --gray-mid: #8B8BA8;
+      --gray-light: #C4C4D4;
+      --font-display: 'Cinzel', serif;
+      --font-body: 'Montserrat', sans-serif;
+      --font-accent: 'Cormorant Garamond', serif;
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 12px;
+      --spacing-lg: 16px;
+      --spacing-xl: 24px;
+      --spacing-2xl: 32px;
+      --spacing-3xl: 48px;
+      --spacing-4xl: 64px;
+      --radius-sm: 4px;
+      --radius-lg: 12px;
+      --transition: 0.2s ease;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: var(--font-body);
+      background: var(--midnight);
+      color: var(--midnight);
+    }
+
+    /* ── Deck ── */
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: var(--spacing-4xl) 80px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(40px);
+      transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+      overflow: hidden;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0);
+      z-index: 1;
+    }
+
+    .slide.prev {
+      transform: translateX(-40px);
+    }
+
+    /* ── Backgrounds ── */
+    .bg-dark { background: var(--midnight); color: var(--white); }
+    .bg-navy { background: var(--navy-dark); color: var(--white); }
+    .bg-light { background: var(--off-white); color: var(--midnight); }
+    .bg-white { background: var(--white); color: var(--midnight); }
+
+    /* ── Decorative patterns ── */
+    .constellation {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .constellation::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border: 2px solid var(--violet-mid);
+      border-radius: 50%;
+      opacity: 0.12;
+      top: -100px;
+      right: -100px;
+    }
+
+    .constellation::after {
+      content: '';
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border: 2px solid var(--violet-core);
+      border-radius: 50%;
+      opacity: 0.08;
+      bottom: 60px;
+      left: 40px;
+    }
+
+    .dot-grid {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(circle, var(--violet-mid) 1.5px, transparent 1.5px);
+      background-size: 48px 48px;
+      opacity: 0.06;
+    }
+
+    .accent-line {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--violet-core);
+    }
+
+    .bg-dark .accent-line { background: var(--violet-mid); }
+
+    /* ── Typography ── */
+    .kicker {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--violet-mid);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .bg-dark .kicker,
+    .bg-navy .kicker { color: var(--violet-light); }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 52px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 3.5vw, 32px);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: 0.04em;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    h3 {
+      font-family: var(--font-display);
+      font-size: clamp(20px, 2.5vw, 24px);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: 0.03em;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .subtitle {
+      font-family: var(--font-body);
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.5;
+      max-width: 640px;
+    }
+
+    .bg-dark .subtitle,
+    .bg-navy .subtitle { color: var(--violet-light); }
+
+    .bg-light .subtitle,
+    .bg-white .subtitle { color: var(--gray-mid); }
+
+    .body-text {
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 720px;
+    }
+
+    .body-text + .body-text { margin-top: var(--spacing-lg); }
+
+    .quote {
+      font-family: var(--font-accent);
+      font-style: italic;
+      font-size: clamp(20px, 2.5vw, 28px);
+      line-height: 1.4;
+      max-width: 680px;
+      color: var(--violet-mid);
+    }
+
+    .bg-dark .quote,
+    .bg-navy .quote { color: var(--violet-light); }
+
+    /* ── Tags ── */
+    .tag {
+      display: inline-block;
+      background: var(--violet-pale);
+      color: var(--deep-violet);
+      padding: 5px 12px;
+      border-radius: 100px;
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    .bg-dark .tag {
+      background: rgba(76, 58, 175, 0.25);
+      color: var(--violet-light);
+    }
+
+    /* ── Cards ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-2xl);
+      max-width: 960px;
+    }
+
+    .card-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+    .card {
+      background: var(--off-white);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      border: 0.5px solid var(--violet-pale);
+      border-left: 3px solid var(--violet-core);
+    }
+
+    .bg-light .card,
+    .bg-white .card {
+      background: var(--white);
+    }
+
+    .card-dark {
+      background: var(--midnight);
+      border: none;
+      border-left: 3px solid var(--violet-mid);
+      color: var(--white);
+    }
+
+    .card .card-kicker {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--violet-mid);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .card-dark .card-kicker { color: var(--violet-light); }
+
+    .card h3 {
+      font-size: 18px;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .card p {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--gray-mid);
+    }
+
+    .card-dark p { color: var(--gray-light); }
+
+    /* ── Lists ── */
+    .bullet-list {
+      list-style: none;
+      margin-top: var(--spacing-xl);
+      max-width: 680px;
+    }
+
+    .bullet-list li {
+      font-size: 15px;
+      line-height: 1.6;
+      padding: var(--spacing-md) 0;
+      padding-left: var(--spacing-2xl);
+      position: relative;
+      border-bottom: 1px solid var(--violet-pale);
+    }
+
+    .bg-dark .bullet-list li,
+    .bg-navy .bullet-list li {
+      border-bottom-color: rgba(123, 98, 212, 0.2);
+    }
+
+    .bullet-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--violet-core);
+    }
+
+    .bg-dark .bullet-list li::before,
+    .bg-navy .bullet-list li::before {
+      background: var(--violet-mid);
+    }
+
+    /* ── Numbered steps ── */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-xl);
+      margin-top: var(--spacing-2xl);
+      max-width: 720px;
+    }
+
+    .step {
+      display: flex;
+      gap: var(--spacing-xl);
+      align-items: flex-start;
+    }
+
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--violet-core);
+      line-height: 1;
+      min-width: 48px;
+    }
+
+    .bg-dark .step-num,
+    .bg-navy .step-num { color: var(--violet-mid); }
+
+    .step-content h3 { font-size: 18px; margin-bottom: var(--spacing-xs); }
+    .step-content p { font-size: 14px; line-height: 1.5; color: var(--gray-mid); }
+    .bg-dark .step-content p,
+    .bg-navy .step-content p { color: var(--gray-light); }
+
+    /* ── Two columns ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-3xl);
+      align-items: center;
+      max-width: 1000px;
+    }
+
+    /* ── Agenda timeline ── */
+    .agenda {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-2xl);
+      max-width: 720px;
+    }
+
+    .agenda-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xl);
+      padding: var(--spacing-lg) var(--spacing-xl);
+      background: rgba(234, 229, 255, 0.5);
+      border-radius: var(--radius-lg);
+      border-left: 3px solid var(--violet-core);
+    }
+
+    .bg-dark .agenda-item {
+      background: rgba(76, 58, 175, 0.12);
+      border-left-color: var(--violet-mid);
+    }
+
+    .agenda-time {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--violet-core);
+      min-width: 64px;
+    }
+
+    .bg-dark .agenda-time { color: var(--violet-light); }
+
+    .agenda-text { font-size: 14px; line-height: 1.4; }
+
+    /* ── Cover specific ── */
+    .cover-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .wordmark {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      color: var(--violet-light);
+      margin-bottom: var(--spacing-3xl);
+    }
+
+    .cover-tags {
+      display: flex;
+      gap: var(--spacing-sm);
+      margin-top: var(--spacing-2xl);
+      flex-wrap: wrap;
+    }
+
+    /* ── Section divider ── */
+    .section-num {
+      font-family: var(--font-display);
+      font-size: 120px;
+      font-weight: 700;
+      color: var(--violet-pale);
+      line-height: 1;
+      margin-bottom: var(--spacing-lg);
+      opacity: 0.6;
+    }
+
+    .bg-dark .section-num,
+    .bg-navy .section-num {
+      color: rgba(123, 98, 212, 0.15);
+    }
+
+    /* ── Exercise box ── */
+    .exercise-box {
+      background: var(--violet-pale);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-2xl);
+      border-left: 3px solid var(--violet-core);
+      max-width: 720px;
+      margin-top: var(--spacing-xl);
+    }
+
+    .bg-dark .exercise-box {
+      background: rgba(76, 58, 175, 0.15);
+      border-left-color: var(--violet-mid);
+    }
+
+    .exercise-box .label {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--violet-core);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .bg-dark .exercise-box .label { color: var(--violet-light); }
+
+    .exercise-box p {
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ── CTA slide ── */
+    .cta-btn {
+      display: inline-block;
+      background: var(--violet-core);
+      color: var(--white);
+      padding: 14px 28px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-top: var(--spacing-2xl);
+      text-decoration: none;
+      transition: background var(--transition);
+    }
+
+    .cta-btn:hover { background: var(--violet-mid); }
+
+    /* ── Navigation UI ── */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--spacing-lg) var(--spacing-2xl);
+      background: rgba(13, 13, 26, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+      border-top: 1px solid rgba(123, 98, 212, 0.15);
+    }
+
+    .nav-brand {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--violet-light);
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-lg);
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1.5px solid var(--violet-mid);
+      color: var(--white);
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+    }
+
+    .nav-btn:hover {
+      background: var(--violet-core);
+      border-color: var(--violet-core);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .nav-btn:disabled:hover {
+      background: transparent;
+      border-color: var(--violet-mid);
+    }
+
+    .slide-counter {
+      font-size: 12px;
+      color: var(--gray-light);
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--violet-core);
+      transition: width 0.3s ease;
+      z-index: 100;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .slide { padding: var(--spacing-3xl) var(--spacing-xl); }
+      .card-grid, .card-grid.cols-3, .two-col { grid-template-columns: 1fr; }
+      .section-num { font-size: 72px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar" id="progress"></div>
+
+  <div class="deck" id="deck">
+
+    <!-- SLIDE 1: Portada -->
+    <section class="slide bg-dark active" data-slide="1">
+      <div class="constellation"></div>
+      <div class="cover-content">
+        <div class="wordmark">I'M ROMA</div>
+        <span class="tag">Taller Creativo</span>
+        <h1 style="margin-top: 24px;">Ecosistema<br>Creativo Consciente</h1>
+        <p class="subtitle">Marca personal · Liderazgo · Proceso creativo</p>
+        <div class="cover-tags">
+          <span class="tag">Estrategia</span>
+          <span class="tag">Coaching</span>
+          <span class="tag">Branding</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: Bienvenida -->
+    <section class="slide bg-light" data-slide="2">
+      <div class="accent-line"></div>
+      <div class="dot-grid"></div>
+      <span class="kicker">Bienvenida</span>
+      <h2>¿Por qué estamos aquí?</h2>
+      <p class="body-text">Este taller integra tres dimensiones del ecosistema I'M ROMA: construir una marca con autoridad, liderar desde la conciencia y diseñar con intención estratégica.</p>
+      <p class="quote" style="margin-top: 32px;">"La claridad no es un destino — es un proceso de alineación continua."</p>
+    </section>
+
+    <!-- SLIDE 3: Agenda -->
+    <section class="slide bg-white" data-slide="3">
+      <div class="accent-line"></div>
+      <span class="kicker">Agenda del taller</span>
+      <h2>Ruta de hoy</h2>
+      <div class="agenda">
+        <div class="agenda-item">
+          <span class="agenda-time">01</span>
+          <span class="agenda-text"><strong>Marca personal y estrategia de contenido</strong> — Tu voz, tu posicionamiento, tu sistema</span>
+        </div>
+        <div class="agenda-item">
+          <span class="agenda-time">02</span>
+          <span class="agenda-text"><strong>Coaching y liderazgo consciente</strong> — Presencia, propósito y toma de decisiones</span>
+        </div>
+        <div class="agenda-item">
+          <span class="agenda-time">03</span>
+          <span class="agenda-text"><strong>Proceso creativo, diseño y branding</strong> — Del concepto a la identidad visual</span>
+        </div>
+        <div class="agenda-item">
+          <span class="agenda-time">04</span>
+          <span class="agenda-text"><strong>Ejercicios prácticos y cierre</strong> — Aplicación inmediata + próximos pasos</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: Módulo 1 divider -->
+    <section class="slide bg-dark" data-slide="4">
+      <div class="constellation"></div>
+      <div class="section-num">01</div>
+      <span class="kicker">Módulo 1</span>
+      <h2>Marca Personal &<br>Estrategia de Contenido</h2>
+      <p class="subtitle">Construir autoridad estratégica con una voz auténtica y un sistema sostenible.</p>
+    </section>
+
+    <!-- SLIDE 5: Marca personal -->
+    <section class="slide bg-light" data-slide="5">
+      <div class="accent-line"></div>
+      <span class="kicker">Fundamentos</span>
+      <h2>Tu marca no es un logo</h2>
+      <p class="body-text">Es la percepción que otros tienen de ti cuando no estás en la sala. Tu marca personal es la intersección entre lo que sabes, lo que sientes y lo que el mundo necesita escuchar.</p>
+      <ul class="bullet-list">
+        <li><strong>Autoridad</strong> — Demuestra expertise sin arrogancia</li>
+        <li><strong>Autenticidad</strong> — Tu voz real, no una versión editada</li>
+        <li><strong>Consistencia</strong> — Repetición estratégica en todos los touchpoints</li>
+        <li><strong>Propósito</strong> — Cada pieza de contenido sirve a una visión mayor</li>
+      </ul>
+    </section>
+
+    <!-- SLIDE 6: Estrategia de contenido -->
+    <section class="slide bg-white" data-slide="6">
+      <div class="accent-line"></div>
+      <span class="kicker">Estrategia</span>
+      <h2>Sistema de contenido I'M ROMA</h2>
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-kicker">Pilar 1</div>
+          <h3>Educar</h3>
+          <p>Contenido que transfiere conocimiento y posiciona tu expertise. Posts, carruseles, guías.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Pilar 2</div>
+          <h3>Inspirar</h3>
+          <p>Historias, reflexiones y citas que conectan emocionalmente con tu audiencia.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Pilar 3</div>
+          <h3>Convertir</h3>
+          <p>CTAs claros hacia servicios, talleres o recursos descargables.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Pilar 4</div>
+          <h3>Comunidad</h3>
+          <p>Contenido que invita al diálogo, preguntas y co-creación.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: Ejercicio módulo 1 -->
+    <section class="slide bg-light" data-slide="7">
+      <div class="accent-line"></div>
+      <span class="kicker">Ejercicio · 10 min</span>
+      <h2>Mapa de voz de marca</h2>
+      <div class="exercise-box">
+        <div class="label">Instrucciones</div>
+        <p>Responde por escrito: <strong>¿Qué problema resuelvo?</strong> · <strong>¿Para quién?</strong> · <strong>¿Qué me diferencia?</strong> · <strong>¿Cómo suena mi voz?</strong> (3 adjetivos)</p>
+      </div>
+      <p class="body-text" style="margin-top: 24px; font-size: 13px; color: var(--gray-mid);">Tip: Piensa en la persona ideal que quieres atraer, no en "todos".</p>
+    </section>
+
+    <!-- SLIDE 8: Módulo 2 divider -->
+    <section class="slide bg-navy" data-slide="8">
+      <div class="constellation"></div>
+      <div class="section-num">02</div>
+      <span class="kicker">Módulo 2</span>
+      <h2>Coaching &<br>Liderazgo Consciente</h2>
+      <p class="subtitle">Liderar desde adentro: presencia, propósito y decisiones alineadas.</p>
+    </section>
+
+    <!-- SLIDE 9: Coaching -->
+    <section class="slide bg-dark" data-slide="9">
+      <div class="accent-line"></div>
+      <span class="kicker">Profundidad</span>
+      <h2>El líder consciente</h2>
+      <div class="two-col">
+        <div>
+          <p class="body-text" style="color: var(--gray-light);">No se trata de tener todas las respuestas. Se trata de hacer las preguntas correctas — primero a ti mismo.</p>
+          <ul class="bullet-list" style="margin-top: 24px;">
+            <li>Escucha activa antes de responder</li>
+            <li>Decisiones desde valores, no desde miedo</li>
+            <li>Vulnerabilidad como fortaleza estratégica</li>
+          </ul>
+        </div>
+        <div>
+          <p class="quote">"La conciencia no es suavidad — es claridad radical sobre quién eres y hacia dónde vas."</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: Framework coaching -->
+    <section class="slide bg-light" data-slide="10">
+      <div class="accent-line"></div>
+      <span class="kicker">Framework</span>
+      <h2>Modelo ROMA de alineación</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">R</span>
+          <div class="step-content">
+            <h3>Reflexión</h3>
+            <p>¿Qué está pasando realmente? Observa sin juzgar. Identifica patrones y creencias limitantes.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">O</span>
+          <div class="step-content">
+            <h3>Orientación</h3>
+            <p>¿Hacia dónde quiero ir? Define la visión y los valores que guían la decisión.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">M</span>
+          <div class="step-content">
+            <h3>Movimiento</h3>
+            <p>¿Cuál es el primer paso concreto? Acción pequeña, medible, con fecha.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">A</span>
+          <div class="step-content">
+            <h3>Accountability</h3>
+            <p>¿Cómo me hago responsable? Revisión, feedback, ajuste continuo.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 11: Ejercicio módulo 2 -->
+    <section class="slide bg-white" data-slide="11">
+      <div class="accent-line"></div>
+      <span class="kicker">Ejercicio · 10 min</span>
+      <h2>Diálogo interno</h2>
+      <div class="exercise-box">
+        <div class="label">Instrucciones</div>
+        <p>Piensa en una decisión pendiente. Aplica el modelo ROMA: escribe una reflexión honesta (R), define tu orientación (O), identifica un movimiento concreto (M) y cómo te harás accountable (A).</p>
+      </div>
+    </section>
+
+    <!-- SLIDE 12: Módulo 3 divider -->
+    <section class="slide bg-dark" data-slide="12">
+      <div class="constellation"></div>
+      <div class="section-num">03</div>
+      <span class="kicker">Módulo 3</span>
+      <h2>Proceso Creativo,<br>Diseño & Branding</h2>
+      <p class="subtitle">Del concepto estratégico a una identidad visual con intención y coherencia.</p>
+    </section>
+
+    <!-- SLIDE 13: Proceso creativo -->
+    <section class="slide bg-light" data-slide="13">
+      <div class="accent-line"></div>
+      <span class="kicker">Metodología</span>
+      <h2>Del insight a la identidad</h2>
+      <div class="card-grid cols-3">
+        <div class="card">
+          <div class="card-kicker">Fase 1</div>
+          <h3>Descubrir</h3>
+          <p>Investigación, entrevistas, análisis de competencia y definición de esencia de marca.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Fase 2</div>
+          <h3>Definir</h3>
+          <p>Arquitectura de marca, tono de voz, paleta conceptual y principios visuales.</p>
+        </div>
+        <div class="card">
+          <div class="card-kicker">Fase 3</div>
+          <h3>Diseñar</h3>
+          <p>Identidad visual, sistema tipográfico, componentes UI y aplicaciones.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 14: Design system preview -->
+    <section class="slide bg-white" data-slide="14">
+      <div class="accent-line"></div>
+      <span class="kicker">I'M ROMA Design System</span>
+      <h2>Los pilares visuales</h2>
+      <div class="two-col">
+        <div>
+          <ul class="bullet-list">
+            <li><strong>Estructura</strong> — Midnight + Off-White (60% / 30%)</li>
+            <li><strong>Energía</strong> — Familia Violeta como acento (8%)</li>
+            <li><strong>Profundidad</strong> — Azul para datos y análisis (2%)</li>
+            <li><strong>Tipografía</strong> — Cinzel · Montserrat · Cormorant</li>
+          </ul>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <div style="width: 64px; height: 64px; background: #0D0D1A; border-radius: 4px;" title="Midnight"></div>
+          <div style="width: 64px; height: 64px; background: #F7F6FF; border-radius: 4px; border: 1px solid #EAE5FF;" title="Off-White"></div>
+          <div style="width: 64px; height: 64px; background: #4C3AAF; border-radius: 4px;" title="Violet Core"></div>
+          <div style="width: 64px; height: 64px; background: #7B62D4; border-radius: 4px;" title="Violet Mid"></div>
+          <div style="width: 64px; height: 64px; background: #2449C0; border-radius: 4px;" title="Blue Core"></div>
+          <div style="width: 64px; height: 64px; background: #EAE5FF; border-radius: 4px;" title="Violet Pale"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 15: Ejercicio módulo 3 -->
+    <section class="slide bg-light" data-slide="15">
+      <div class="accent-line"></div>
+      <span class="kicker">Ejercicio · 15 min</span>
+      <h2>Moodboard de marca</h2>
+      <div class="exercise-box">
+        <div class="label">Instrucciones</div>
+        <p>Con lo aprendido hoy, crea un moodboard rápido (digital o en papel): 3 colores, 2 tipografías, 5 palabras clave y 1 imagen que represente la esencia de tu marca.</p>
+      </div>
+    </section>
+
+    <!-- SLIDE 16: Integración -->
+    <section class="slide bg-dark" data-slide="16">
+      <div class="constellation"></div>
+      <span class="kicker">Integración</span>
+      <h2>Los tres pilares conectados</h2>
+      <div class="card-grid cols-3" style="margin-top: 32px;">
+        <div class="card card-dark">
+          <div class="card-kicker">Marca</div>
+          <h3>Tu voz</h3>
+          <p>Define qué dices y a quién se lo dices.</p>
+        </div>
+        <div class="card card-dark">
+          <div class="card-kicker">Coaching</div>
+          <h3>Tu interior</h3>
+          <p>Alinea quién eres con lo que proyectas.</p>
+        </div>
+        <div class="card card-dark">
+          <div class="card-kicker">Diseño</div>
+          <h3>Tu imagen</h3>
+          <p>Traduce tu esencia en experiencia visual.</p>
+        </div>
+      </div>
+      <p class="quote" style="margin-top: 40px; text-align: center; max-width: 100%;">"Cuando los tres están alineados, la marca deja de ser performance y se convierte en presencia."</p>
+    </section>
+
+    <!-- SLIDE 17: Próximos pasos -->
+    <section class="slide bg-light" data-slide="17">
+      <div class="accent-line"></div>
+      <span class="kicker">Cierre</span>
+      <h2>Próximos pasos</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">1</span>
+          <div class="step-content">
+            <h3>Completa tus ejercicios</h3>
+            <p>Revisa el mapa de voz, el modelo ROMA y tu moodboard esta semana.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">2</span>
+          <div class="step-content">
+            <h3>Publica una pieza de contenido</h3>
+            <p>Aplica tu voz de marca en un post, story o artículo en los próximos 7 días.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">3</span>
+          <div class="step-content">
+            <h3>Conecta con la comunidad</h3>
+            <p>Comparte tus avances y preguntas. El ecosistema crece en comunidad.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 18: Cierre -->
+    <section class="slide bg-dark" data-slide="18">
+      <div class="constellation"></div>
+      <div class="cover-content" style="text-align: center; width: 100%;">
+        <div class="wordmark">I'M ROMA</div>
+        <h1>Gracias</h1>
+        <p class="subtitle" style="margin: 0 auto;">Autoridad estratégica con profundidad consciente.</p>
+        <a href="#" class="cta-btn">Explorar el ecosistema</a>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav-bar">
+    <span class="nav-brand">I'M ROMA</span>
+    <div class="nav-controls">
+      <button class="nav-btn" id="prevBtn" aria-label="Anterior" disabled>&#8592;</button>
+      <span class="slide-counter" id="counter">1 / 18</span>
+      <button class="nav-btn" id="nextBtn" aria-label="Siguiente">&#8594;</button>
+    </div>
+  </nav>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counter = document.getElementById('counter');
+    const progress = document.getElementById('progress');
+    let current = 0;
+    const total = slides.length;
+
+    function goTo(index) {
+      if (index < 0 || index >= total) return;
+
+      slides[current].classList.remove('active');
+      slides[current].classList.add('prev');
+      current = index;
+      slides.forEach((s, i) => {
+        s.classList.remove('active', 'prev');
+        if (i === current) s.classList.add('active');
+        else if (i < current) s.classList.add('prev');
+      });
+
+      counter.textContent = `${current + 1} / ${total}`;
+      progress.style.width = `${((current + 1) / total) * 100}%`;
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === total - 1;
+    }
+
+    prevBtn.addEventListener('click', () => goTo(current - 1));
+    nextBtn.addEventListener('click', () => goTo(current + 1));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        goTo(current + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        goTo(current - 1);
+      } else if (e.key === 'Home') {
+        goTo(0);
+      } else if (e.key === 'End') {
+        goTo(total - 1);
+      }
+    });
+
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', (e) => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        diff > 0 ? goTo(current + 1) : goTo(current - 1);
+      }
+    });
+
+    goTo(0);
+  </script>
+
+</body>
+</html>
