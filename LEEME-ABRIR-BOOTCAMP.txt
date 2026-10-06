@@ -1,0 +1,49 @@
+BOOTCAMP — CÓMO ABRIR (2 minutos)
+================================
+
+LOCALHOST — Los 3 días en Chrome o Edge (fuera de Cursor)
+-------------------------------------------------------
+1. Doble clic en:  ABRIR-BOOTCAMP.bat
+2. Espera ~4 s → se abre el menú con los 3 días.
+3. Elige Día 1, 2 o 3. Dentro de cada uno: **Siguiente →** al pie de cada slide.
+
+URLs (con el servidor encendido):
+  Menú:  http://127.0.0.1:8765/bootcamp.html
+  Día 1: http://127.0.0.1:8765/Bootcamp-Dia-1-Presentacion.html
+  Día 2: http://127.0.0.1:8765/Bootcamp-Dia-2-Presentacion.html
+  Día 3: http://127.0.0.1:8765/Bootcamp-Dia-3-Presentacion.html
+
+Si localhost NO CARGA
+---------------------
+1. Prueba: ABRIR-BOOTCAMP-SIN-SERVIDOR.bat
+   (abre bootcamp.html directo, sin puerto 8765)
+
+2. O clic derecho en bootcamp.html → Abrir con → Chrome
+
+3. Si quieres localhost: clic derecho ABRIR-BOOTCAMP.ps1 → Ejecutar con PowerShell
+   (el .bat viejo fallaba por la ruta "IM ROMA" con espacios; ya está corregido)
+
+Manual PowerShell:
+  cd "c:\Users\cali4\OneDrive\Desktop\IM ROMA\Presentaciones"
+  npx --yes serve -l 8765
+  → http://127.0.0.1:8765/bootcamp.html
+
+
+OPCIÓN B — Sin servidor (solo lectura)
+--------------------------------------
+1. Carpeta del proyecto → Bootcamp-Dia-1-Presentacion.html
+2. Clic derecho → Abrir con → Google Chrome o Microsoft Edge
+3. Desplázate hacia abajo: cada bloque es una “diapositiva”.
+   (Cursor por dentro NO sirve para presentar; usa el navegador.)
+
+
+Archivos en la raíz
+-------------------
+Bootcamp-Dia-1-Presentacion.html
+Bootcamp-Dia-2-Presentacion.html
+Bootcamp-Dia-3-Presentacion.html
+
+Contenido desde: presentaciones/IM_ROMA_Bootcamp_De_la_Idea_a_un_Creativo_3_Dias_v3.md
+
+Regenerar tras editar el .md:
+  node scripts/generar-bootcamp-desde-md.mjs

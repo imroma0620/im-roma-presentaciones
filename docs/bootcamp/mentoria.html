@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mentoría personalizada para marcas · I'M ROMA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --midnight: #0D0D1A; --off-white: #F7F6FF; --white: #FFFFFF;
+      --deep-violet: #2A1F5C; --violet-core: #4C3AAF; --violet-mid: #7B62D4;
+      --violet-light: #B8A4F0; --violet-pale: #EAE5FF; --gray-mid: #8B8BA8;
+      --font-display: 'Cinzel', serif; --font-body: 'Montserrat', sans-serif;
+      --font-accent: 'Cormorant Garamond', serif; --radius-lg: 12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; font-family: var(--font-body); font-size: 14px; background: var(--white); color: var(--midnight); }
+    .deck { width: 100vw; height: 100vh; position: relative; }
+    .slide { position: absolute; inset: 0; opacity: 0; visibility: hidden; transform: translateX(24px); transition: opacity 0.3s, transform 0.3s, visibility 0.3s; overflow: hidden; }
+    .slide.active { opacity: 1; visibility: visible; transform: translateX(0); z-index: 1; }
+    .slide-hero { background: var(--white); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 64px 48px; text-align: center; }
+    .slide-hero::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, var(--violet-mid) 1px, transparent 1px); background-size: 56px 56px; opacity: 0.04; pointer-events: none; }
+    .slide-main { background: var(--off-white); }
+    .slide-main.dark { background: var(--midnight); color: var(--white); }
+    .slide-body { padding: 44px 56px 88px; overflow-y: auto; display: flex; flex-direction: column; justify-content: center; min-height: 0; height: 100%; max-width: 980px; margin: 0 auto; width: 100%; }
+    .slide-body.wide { max-width: 1060px; }
+    .slide-body.top { justify-content: flex-start; padding-top: 36px; }
+    .kicker { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: var(--violet-mid); margin-bottom: 12px; }
+    h1 { font-family: var(--font-display); font-size: clamp(26px,4vw,40px); font-weight: 700; line-height: 1.12; letter-spacing: 0.04em; margin-bottom: 14px; max-width: 900px; }
+    h2 { font-family: var(--font-display); font-size: clamp(22px,2.8vw,28px); font-weight: 700; line-height: 1.15; letter-spacing: 0.04em; margin-bottom: 14px; }
+    .subtitle, .body-text { font-size: 14px; line-height: 1.55; color: var(--gray-mid); max-width: 680px; }
+    .slide-main.dark .body-text, .slide-main.dark .subtitle { color: var(--violet-light); }
+    .desc-block { font-family: var(--font-accent); font-size: clamp(17px,2.2vw,22px); line-height: 1.55; color: var(--deep-violet); max-width: 780px; margin: 0 0 16px; }
+    .slide-main.dark .desc-block { color: var(--violet-light); }
+    .tag { display: inline-block; background: var(--violet-core); color: var(--white); padding: 6px 14px; border-radius: 100px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 12px; }
+    .slide-main.dark .tag { background: var(--white); color: var(--midnight); }
+    .highlight-box { background: var(--white); border-radius: var(--radius-lg); padding: 16px 20px; border-left: 4px solid var(--violet-core); max-width: 780px; margin-top: 4px; }
+    .highlight-box p { font-size: 14px; line-height: 1.55; color: var(--gray-mid); }
+    .key-list { list-style: none; max-width: 720px; }
+    .key-list li { font-size: 14px; line-height: 1.5; padding: 9px 0 9px 22px; position: relative; border-bottom: 1px solid var(--violet-pale); color: var(--gray-mid); }
+    .key-list li::before { content: ''; position: absolute; left: 0; top: 16px; width: 7px; height: 7px; border-radius: 50%; background: var(--violet-core); }
+    .key-list li strong { font-weight: 600; color: var(--midnight); }
+    .schedule-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; width: 100%; max-width: 820px; }
+    .schedule-card { background: rgba(255,255,255,0.07); border-radius: var(--radius-lg); padding: 20px 18px; border-top: 3px solid var(--violet-light); display: flex; flex-direction: column; gap: 8px; }
+    .slide-main:not(.dark) .schedule-card { background: var(--white); border: 1px solid var(--violet-pale); border-top: 3px solid var(--violet-core); }
+    .schedule-card .sess { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--violet-core); }
+    .slide-main.dark .schedule-card .sess { color: var(--violet-light); }
+    .schedule-card h3 { font-family: var(--font-display); font-size: 16px; line-height: 1.2; }
+    .schedule-card p { font-size: 13px; line-height: 1.5; color: var(--gray-mid); flex: 1; }
+    .slide-main.dark .schedule-card p { color: var(--violet-light); }
+    .schedule-card .del { font-size: 11px; font-weight: 600; color: var(--deep-violet); background: var(--violet-pale); padding: 6px 10px; border-radius: 6px; margin-top: auto; align-self: flex-start; }
+    .slide-main.dark .schedule-card .del { color: var(--white); background: rgba(76,58,175,0.45); }
+    .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; max-width: 820px; margin-top: 8px; }
+    .info-card { background: var(--white); border-radius: var(--radius-lg); padding: 18px 20px; border-left: 3px solid var(--violet-core); }
+    .info-card strong { color: var(--midnight); font-size: 14px; display: block; margin-bottom: 6px; }
+    .info-card p { font-size: 13px; line-height: 1.45; color: var(--gray-mid); }
+    .slide-main.dark .info-card { background: rgba(255,255,255,0.06); }
+    .slide-main.dark .info-card strong { color: var(--white); }
+    .slide-main.dark .info-card p { color: var(--violet-light); }
+    .price-hero { font-family: var(--font-display); font-size: clamp(42px, 8vw, 64px); color: var(--violet-core); letter-spacing: 0.02em; margin: 8px 0 4px; }
+    .price-note { font-size: 13px; color: var(--gray-mid); }
+    .hero-dates { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
+    .date-pill { background: var(--violet-pale); color: var(--deep-violet); padding: 8px 16px; border-radius: 100px; font-size: 12px; font-weight: 600; }
+    .accent-bar { width: 48px; height: 3px; background: var(--violet-core); margin-top: 16px; }
+    .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--violet-core); transition: width 0.3s; z-index: 100; }
+    .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; padding: 14px 32px; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); z-index: 100; border-top: 1px solid var(--violet-pale); }
+    .nav-brand { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 0.2em; color: var(--violet-core); }
+    .nav-controls { display: flex; align-items: center; gap: 16px; }
+    .nav-btn { background: transparent; border: 1.5px solid var(--violet-mid); color: var(--midnight); width: 44px; height: 44px; border-radius: 4px; cursor: pointer; font-size: 18px; }
+    .nav-btn:hover:not(:disabled) { background: var(--violet-core); border-color: var(--violet-core); color: var(--white); }
+    .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .slide-counter { font-size: 14px; color: var(--gray-mid); min-width: 56px; text-align: center; }
+    @media (max-width: 900px) {
+      .slide-body { padding: 28px 20px 88px; }
+      .schedule-row, .info-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progress"></div>
+  <div class="deck" id="deck">
+
+    <section class="slide slide-hero active">
+      <span class="kicker">Después del bootcamp · 1 a 1</span>
+      <h1>Mentoría personalizada<br>para tu marca</h1>
+      <p class="price-hero">50 USD</p>
+      <p class="price-note">Inversión única · 2 sesiones en vivo · virtual</p>
+      <p class="subtitle" style="margin-top:16px;">I'M ROMA · Diana Stephani Muñoz Ramos</p>
+      <div class="hero-dates">
+        <span class="date-pill">Tu producto</span>
+        <span class="date-pill">Tu guion</span>
+        <span class="date-pill">Tus creativos</span>
+      </div>
+      <div class="accent-bar"></div>
+    </section>
+
+    <section class="slide slide-main">
+      <div class="slide-body">
+        <span class="tag">La propuesta</span>
+        <h2>¿Qué es esta mentoría?</h2>
+        <p class="desc-block">Acompañamiento individual para marcas y emprendimientos que ya entienden el proceso — o salieron del bootcamp — y necesitan aplicarlo a su caso real, con ojos expertos encima de su contenido.</p>
+        <div class="highlight-box">
+          <p>No es otra clase grupal. Son <strong>dos sesiones contigo</strong>: revisamos tu marca, afinamos mensaje y piezas, y avanzas con entregables concretos para publicar o pautar.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide slide-main dark">
+      <div class="slide-body wide top">
+        <span class="tag">Para quién</span>
+        <h2>Ideal si…</h2>
+        <ul class="key-list" style="max-width:720px;">
+          <li>Tienes <strong>marca propia</strong> y quieres anuncios o contenido que vendan, no solo “se vean bien”</li>
+          <li>Participaste en el <strong>bootcamp</strong> y quieres llevar el método a tu producto con acompañamiento</li>
+          <li>Generas con IA pero los resultados salen <strong>genéricos o inconclusos</strong></li>
+          <li>Necesitas claridad en <strong>guion, hook, CTA y copy</strong> para tu nicho</li>
+          <li>Prefieres <strong>agenda flexible</strong> y foco 100% en tu negocio</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide slide-main">
+      <div class="slide-body wide top">
+        <span class="tag">Formato</span>
+        <h2>Las 2 sesiones</h2>
+        <div class="schedule-row">
+          <div class="schedule-card">
+            <span class="sess">Sesión 1</span>
+            <h3>Diagnóstico + dirección</h3>
+            <p>Producto, público, necesidad y propuesta. Estructuramos o corregimos tu guion (AIDA) y el mapa de escenas para IA. Definimos qué producir primero y en qué formato (9:16, duración, tono).</p>
+            <span class="del">Salida: plan claro + guion alineado a tu marca</span>
+          </div>
+          <div class="schedule-card">
+            <span class="sess">Sesión 2</span>
+            <h3>Producción y cierre</h3>
+            <p>Revisión de clips o borrador editado: hook, continuidad, subtítulos, voz, CTA. Ajustes de prompts, edición en CapCut y copy que acompaña el video. Priorizamos lo que publicas ya.</p>
+            <span class="del">Salida: pieza avanzada o lista + próximos pasos</span>
+          </div>
+        </div>
+        <p class="body-text" style="margin-top:16px;">Duración sugerida por sesión: <strong>60–90 min</strong> · virtual en vivo · horario coordinado contigo.</p>
+      </div>
+    </section>
+
+    <section class="slide slide-main">
+      <div class="slide-body wide top">
+        <span class="tag">Trabajamos</span>
+        <h2>En tu marca, no en un ejemplo genérico</h2>
+        <div class="info-grid">
+          <div class="info-card">
+            <strong>Mensaje y guion</strong>
+            <p>Idea, problema, deseo y acción aplicados a tu producto o servicio.</p>
+          </div>
+          <div class="info-card">
+            <strong>Creativos con IA</strong>
+            <p>Prompts, referencias, Flow, Firefly, Higgsfield según tu acceso.</p>
+          </div>
+          <div class="info-card">
+            <strong>Edición y audio</strong>
+            <p>Hook, ritmo, subtítulos, voz y exportación en CapCut.</p>
+          </div>
+          <div class="info-card">
+            <strong>Copy del anuncio</strong>
+            <p>Texto que complementa el video — sin repetir lo que ya se vio.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide slide-main dark">
+      <div class="slide-body">
+        <span class="tag">Mentora</span>
+        <h2>Diana Stephani Muñoz Ramos</h2>
+        <p class="body-text" style="margin-bottom:16px;color:var(--violet-light);">Diseñadora gráfica · Estrategia digital · I'M ROMA · @im.diana.gd</p>
+        <ul class="key-list">
+          <li>Desde <strong>2016</strong> en redes y contenido estratégico</li>
+          <li><strong>Marcas desde la Raíz</strong> — mentoría a emprendedores</li>
+          <li>Bootcamp <strong>De la idea a un creativo en 3 días</strong></li>
+          <li>Enfoque: intención creativa + IA como herramienta, no sustituto</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide slide-hero">
+      <span class="kicker">Siguiente paso</span>
+      <h1>Inversión<br>50 USD</h1>
+      <p class="desc-block" style="text-align:center;max-width:520px;">2 sesiones personalizadas · pago único · cupos limitados por agenda</p>
+      <div class="hero-dates">
+        <span class="date-pill">Escríbeme</span>
+        <span class="date-pill">@im.diana.gd</span>
+        <span class="date-pill">Instagram</span>
+      </div>
+      <p class="subtitle" style="margin-top:20px;">Indica tu marca, qué vendes y si vienes del bootcamp.<br>Coordinamos fechas y empezamos con tu caso.</p>
+      <div class="accent-bar"></div>
+    </section>
+
+  </div>
+
+  <nav class="nav-bar">
+    <span class="nav-brand">I'M ROMA</span>
+    <div class="nav-controls">
+      <button class="nav-btn" id="prevBtn" aria-label="Anterior" disabled>&#8592;</button>
+      <span class="slide-counter" id="counter">1 / 7</span>
+      <button class="nav-btn" id="nextBtn" aria-label="Siguiente">&#8594;</button>
+    </div>
+  </nav>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counter = document.getElementById('counter');
+    const progress = document.getElementById('progress');
+    let current = 0;
+    const total = slides.length;
+    function goTo(i) {
+      if (i < 0 || i >= total) return;
+      slides[current].classList.remove('active');
+      current = i;
+      slides.forEach((s, n) => s.classList.toggle('active', n === current));
+      counter.textContent = `${current + 1} / ${total}`;
+      progress.style.width = `${((current + 1) / total) * 100}%`;
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === total - 1;
+    }
+    prevBtn.addEventListener('click', () => goTo(current - 1));
+    nextBtn.addEventListener('click', () => goTo(current + 1));
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+    });
+    goTo(0);
+  </script>
+</body>
+</html>

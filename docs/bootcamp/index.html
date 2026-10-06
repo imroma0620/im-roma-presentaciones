@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bootcamp · De la idea a un creativo · I'M ROMA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --midnight: #0D0D1A;
+      --violet-core: #4C3AAF;
+      --violet-mid: #7B62D4;
+      --violet-pale: #EAE5FF;
+      --off: #F7F6FF;
+      --gray: #8B8BA8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--off);
+      color: var(--midnight);
+      min-height: 100vh;
+      padding: 48px 20px 64px;
+    }
+    .wrap { max-width: 560px; margin: 0 auto; }
+    .brand {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      color: var(--violet-mid);
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(26px, 5vw, 34px);
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+    .lead { font-size: 15px; line-height: 1.6; color: var(--gray); margin-bottom: 32px; }
+    .day-link {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: #fff;
+      border: 1px solid var(--violet-pale);
+      border-left: 4px solid var(--violet-core);
+      border-radius: 12px;
+      padding: 20px 22px;
+      margin-bottom: 12px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .day-link:hover {
+      background: var(--violet-pale);
+      transform: translateX(4px);
+    }
+    .day-link .num {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--violet-mid);
+      margin-bottom: 6px;
+    }
+    .day-link .title { font-weight: 600; font-size: 16px; margin-bottom: 4px; }
+    .day-link .sub { font-size: 13px; color: var(--gray); line-height: 1.45; }
+    .extra {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--violet-pale);
+    }
+    .extra a {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--violet-core);
+      text-decoration: none;
+    }
+    .extra a:hover { text-decoration: underline; }
+    .hint {
+      margin-top: 28px;
+      font-size: 12px;
+      color: var(--gray);
+      line-height: 1.55;
+      padding: 14px 16px;
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid var(--violet-pale);
+    }
+    .hint strong { color: var(--midnight); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="brand">I'M ROMA</p>
+    <h1>Bootcamp<br>De la idea a un creativo en 3 días</h1>
+    <p class="lead">Presentaciones para dictar en vivo. Elige el día — dentro de cada una usa <strong>Siguiente →</strong> al pie de cada pantalla.</p>
+
+    <a class="day-link" href="dia-1.html">
+      <div class="num">Sesión 1 · 2 h</div>
+      <div class="title">Día 1 · De la idea al guion</div>
+      <div class="sub">AIDA · mapa de escenas · prompts · ejercicio con tu producto</div>
+    </a>
+    <a class="day-link" href="dia-2.html">
+      <div class="num">Sesión 2 · 2 h</div>
+      <div class="title">Día 2 · Producir</div>
+      <div class="sub">Google Flow · Adobe Firefly · Higgsfield · vertical 9:16</div>
+    </a>
+    <a class="day-link" href="dia-3.html">
+      <div class="num">Sesión 3 · 2 h</div>
+      <div class="title">Día 3 · Editar</div>
+      <div class="sub">CapCut · hook · audio · subtítulos · copy · exportación</div>
+    </a>
+
+    <div class="extra">
+      <a href="mentoria.html">Mentoría 1 a 1 para marcas · 50 USD · 2 sesiones</a>
+    </div>
+
+    <p class="hint">En cada presentación: enlaces <strong>Siguiente →</strong> y <strong>← Anterior</strong> (no requieren JavaScript). Para imprimir o PDF: Ctrl+P → Guardar como PDF.</p>
+  </div>
+</body>
+</html>

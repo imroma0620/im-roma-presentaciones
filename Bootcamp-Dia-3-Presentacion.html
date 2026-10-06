@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bootcamp Día 3 · Editar · I'M ROMA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --white: #FFFFFF;
+      --midnight: #0D0D1A;
+      --off: #F7F6FF;
+      --violet-core: #4C3AAF;
+      --violet-mid: #7B62D4;
+      --violet-pale: #EAE5FF;
+      --border-soft: #F0EDFF;
+      --text-muted: rgba(13, 13, 26, 0.6);
+      --text-soft: rgba(13, 13, 26, 0.45);
+      --font-display: 'Cinzel', serif;
+      --font-body: 'Montserrat', sans-serif;
+      --font-accent: 'Cormorant Garamond', serif;
+      --radius-xl: 24px;
+      --radius-phone: 32px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; background: var(--white); color: var(--midnight); font-family: var(--font-body), system-ui, sans-serif; font-size: 15px; -webkit-font-smoothing: antialiased; }
+    .deck { width: 100vw; height: 100vh; position: relative; }
+    .slide {
+      position: absolute; inset: 0; opacity: 0; visibility: hidden;
+      transform: translateY(12px); transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s;
+      overflow: hidden; background: var(--white);
+    }
+    .slide.active { opacity: 1; visibility: visible; transform: translateY(0); z-index: 1; }
+    .slide-inner {
+      height: 100%; max-width: 1280px; margin: 0 auto; padding: 72px 48px 88px;
+      display: flex; flex-direction: column; justify-content: center;
+      overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    }
+    .slide-inner.top { justify-content: flex-start; padding-top: 56px; }
+    .slide-inner.split-layout {
+      display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center;
+      max-width: 1280px; padding: 64px 48px 88px; height: 100%; margin: 0 auto;
+      overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    }
+    .top-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      border-bottom: 1px solid var(--border-soft); background: rgba(255,255,255,0.82); backdrop-filter: blur(12px);
+      padding: 18px 48px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .brand-row { display: flex; align-items: center; gap: 20px; }
+    .brand { font-family: var(--font-display); font-size: 11px; letter-spacing: 0.35em; font-weight: 500; }
+    .brand-sep { width: 1px; height: 12px; background: var(--violet-pale); }
+    .brand-meta { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet-mid); font-weight: 500; }
+    .status-pill { display: flex; align-items: center; gap: 8px; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-soft); }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--violet-core); }
+    .kicker { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--violet-mid); font-weight: 500; margin-bottom: 16px; }
+    h1.display { font-family: var(--font-display); font-size: clamp(36px, 5vw, 58px); line-height: 0.98; letter-spacing: -0.02em; font-weight: 400; margin-bottom: 12px; }
+    h2.slide-title { font-family: var(--font-display); font-size: clamp(26px, 3.2vw, 36px); line-height: 1.08; letter-spacing: -0.01em; font-weight: 400; margin-bottom: 16px; }
+    h3.section { font-family: var(--font-display); font-size: 18px; letter-spacing: 0.02em; margin-bottom: 10px; }
+    .accent { font-family: var(--font-accent); font-style: italic; font-weight: 300; color: var(--violet-core); }
+    .lead { font-size: 15px; line-height: 1.65; color: var(--text-muted); max-width: 640px; }
+    .panel { background: var(--off); border-radius: var(--radius-xl); padding: 28px 32px; border: 1px solid var(--border-soft); }
+    .panel.dark { background: var(--midnight); color: var(--white); border-color: #1E1E2E; }
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border-soft); max-width: 520px; }
+    .stat-label { font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 4px; }
+    .stat-value { font-family: var(--font-display); font-size: 14px; }
+    .stat-sub { font-size: 10px; color: var(--text-muted); margin-top: 2px; font-weight: 400; }
+    .chip-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; max-width: 720px; }
+    .chip { background: var(--white); border: 1px solid var(--violet-pale); padding: 10px 16px; border-radius: 100px; font-size: 13px; font-weight: 500; color: var(--midnight); }
+    .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; max-width: 820px; }
+    .compare-card { border-radius: var(--radius-xl); padding: 22px 24px; border: 1px solid var(--border-soft); position: relative; overflow: hidden; }
+    .compare-card.search { background: var(--white); }
+    .compare-card.generate { background: var(--off); border-color: var(--violet-pale); }
+    .compare-card .label { font-size: 8px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--violet-mid); margin-bottom: 12px; font-weight: 600; }
+    .compare-card blockquote { font-size: 14px; line-height: 1.55; color: var(--midnight); font-weight: 400; }
+    .compare-card.generate blockquote { font-weight: 500; }
+    .arrow-row { display: flex; align-items: center; gap: 20px; margin-top: 20px; font-family: var(--font-display); font-size: 15px; }
+    .arrow-row span { color: var(--text-muted); font-family: var(--font-body); font-size: 13px; }
+    .arrow-row strong { color: var(--violet-core); font-family: var(--font-display); font-weight: 500; }
+    .bullet-list { list-style: none; max-width: 680px; margin-top: 12px; }
+    .bullet-list li {
+      font-size: 15px; line-height: 1.55; color: var(--text-muted); padding: 10px 0 10px 22px; position: relative;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .bullet-list li:last-child { border-bottom: none; }
+    .bullet-list li::before { content: ''; position: absolute; left: 0; top: 18px; width: 6px; height: 6px; border-radius: 50%; background: var(--violet-core); }
+    .bullet-list li strong { color: var(--midnight); font-weight: 600; }
+    .idea-card {
+      background: var(--white); border: 1px solid var(--violet-pale); border-radius: var(--radius-xl);
+      padding: 28px 32px; margin-top: 16px; max-width: 720px;
+      box-shadow: 0 20px 60px -40px rgba(76, 58, 175, 0.35);
+    }
+    .idea-card .quote { font-family: var(--font-accent); font-style: italic; font-size: 22px; line-height: 1.45; color: var(--violet-core); margin-bottom: 12px; }
+    .idea-card p { font-size: 14px; line-height: 1.6; color: var(--text-muted); }
+    .weak-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 20px; margin-top: 16px; max-width: 640px; }
+    .weak-item { font-size: 14px; color: var(--text-muted); padding-left: 18px; position: relative; }
+    .weak-item::before { content: '·'; position: absolute; left: 0; color: var(--violet-mid); font-weight: 700; }
+    .prompt-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 20px; align-items: stretch; }
+    .prompt-card {
+      border-radius: 20px; padding: 20px 18px; border: 1px solid var(--border-soft); background: var(--white);
+      display: flex; flex-direction: column; gap: 12px; min-height: 220px;
+    }
+    .prompt-card.level-a { opacity: 0.85; }
+    .prompt-card.level-b { opacity: 0.92; border-color: var(--violet-pale); }
+    .prompt-card.level-c {
+      background: var(--off); border: 2px solid var(--violet-core);
+      box-shadow: 0 16px 48px -28px rgba(76, 58, 175, 0.5);
+    }
+    .prompt-card .lvl { font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--violet-mid); font-weight: 600; }
+    .prompt-card.level-c .lvl { color: var(--violet-core); }
+    .prompt-card blockquote { font-size: 12px; line-height: 1.55; color: var(--midnight); flex: 1; }
+    .prompt-card .meter { height: 4px; background: var(--violet-pale); border-radius: 4px; overflow: hidden; }
+    .prompt-card .meter i { display: block; height: 100%; background: var(--violet-mid); border-radius: 4px; }
+    .prompt-card.level-a .meter i { width: 28%; }
+    .prompt-card.level-b .meter i { width: 52%; }
+    .prompt-card.level-c .meter i { width: 100%; background: var(--violet-core); }
+    .visual-frame {
+      border-radius: var(--radius-phone); border: 1px solid var(--violet-pale); overflow: hidden;
+      aspect-ratio: 9/16; max-height: min(72vh, 520px); width: auto; margin: 0 auto;
+      box-shadow: 0 20px 60px -30px rgba(76, 58, 175, 0.25); position: relative; background: var(--off);
+    }
+    .visual-art {
+      width: 100%; height: 100%; min-height: 240px; display: block;
+      background: linear-gradient(160deg, #F7F6FF 0%, #B8A4F0 42%, #4C3AAF 100%);
+      position: relative;
+    }
+    .visual-art::before {
+      content: ''; position: absolute; inset: 12%; border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.35);
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), transparent 55%);
+    }
+    .mini-art {
+      width: 100%; height: 100%; min-height: 120px;
+      background: linear-gradient(145deg, #EAE5FF, #7B62D4);
+    }
+    .mini-art.alt { background: linear-gradient(145deg, #F7F6FF, #4C3AAF); }
+    .visual-frame .overlay {
+      position: absolute; inset: 0; background: linear-gradient(to top, rgba(255,255,255,0.92) 0%, transparent 45%);
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 24px;
+    }
+    .visual-frame .tag-mini { font-size: 7px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--violet-mid); margin-bottom: 8px; }
+    .visual-frame .cap { font-family: var(--font-display); font-size: 20px; line-height: 1.15; }
+    .visual-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: center; }
+    .mini-frame { border-radius: 16px; overflow: hidden; aspect-ratio: 4/5; border: 1px solid var(--border-soft); background: var(--off); }
+    .cta-line {
+      display: inline-flex; align-items: center; gap: 10px; margin-top: 20px;
+      background: var(--violet-core); color: var(--white); border-radius: 100px;
+      padding: 10px 18px; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600;
+    }
+    .nav-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+      border-top: 1px solid var(--border-soft); background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);
+      padding: 14px 48px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-btn {
+      width: 44px; height: 44px; border-radius: 8px; border: 1px solid var(--violet-pale);
+      background: var(--white); cursor: pointer; font-size: 18px; color: var(--midnight);
+    }
+    .nav-btn:hover:not(:disabled) { background: var(--violet-core); border-color: var(--violet-core); color: var(--white); }
+    .nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .progress { flex: 1; max-width: 280px; height: 3px; background: var(--violet-pale); border-radius: 3px; margin: 0 20px; overflow: hidden; }
+    .progress i { display: block; height: 100%; background: var(--violet-core); transition: width 0.3s; width: 0; }
+    .counter { font-size: 12px; color: var(--text-muted); min-width: 64px; text-align: center; letter-spacing: 0.05em; }
+    .data-table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 13px; }
+    .data-table th, .data-table td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border-soft); vertical-align: top; }
+    .data-table th { font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet-mid); font-weight: 600; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .tri-panel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px; }
+    .tri-panel .panel { padding: 20px 22px; }
+    .tri-panel h3 { font-family: var(--font-display); font-size: 14px; margin-bottom: 8px; }
+    .tri-panel p, .tri-panel ul { font-size: 13px; line-height: 1.55; color: var(--text-muted); }
+    .tri-panel ul { list-style: none; margin-top: 8px; }
+    .tri-panel li { padding: 4px 0 4px 14px; position: relative; }
+    .tri-panel li::before { content: ''; position: absolute; left: 0; top: 11px; width: 5px; height: 5px; border-radius: 50%; background: var(--violet-mid); }
+    .level-stack { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; max-width: 820px; }
+    .level-item { border-radius: 16px; padding: 16px 20px; border: 1px solid var(--border-soft); background: var(--white); }
+    .level-item.highlight { background: var(--off); border-color: var(--violet-core); border-width: 2px; }
+    .level-item .num { font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--violet-mid); font-weight: 600; margin-bottom: 6px; }
+    .level-item blockquote { font-size: 13px; line-height: 1.5; color: var(--midnight); }
+    .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-top: 12px; max-width: 720px; }
+    .check-item { font-size: 13px; color: var(--text-muted); padding-left: 22px; position: relative; }
+    .check-item::before { content: '□'; position: absolute; left: 0; color: var(--violet-core); font-size: 12px; }
+    .step-list { counter-reset: steps; list-style: none; max-width: 680px; margin-top: 12px; }
+    .step-list li { counter-increment: steps; font-size: 14px; line-height: 1.55; color: var(--text-muted); padding: 12px 0 12px 36px; position: relative; border-bottom: 1px solid var(--border-soft); }
+    .step-list li::before { content: counter(steps); position: absolute; left: 0; top: 12px; width: 24px; height: 24px; border-radius: 50%; background: var(--violet-pale); color: var(--violet-core); font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+    .slide-divider { background: var(--midnight); color: var(--white); }
+    .slide-divider .kicker { color: rgba(255,255,255,0.55); }
+    .slide-divider .slide-title { color: var(--white); }
+    .slide-divider .lead { color: rgba(255,255,255,0.72); }
+    .formula-box { margin-top: 20px; padding: 20px 24px; border-radius: var(--radius-xl); background: var(--midnight); color: var(--white); font-family: var(--font-display); font-size: clamp(14px, 2vw, 18px); line-height: 1.5; letter-spacing: 0.02em; max-width: 720px; }
+    .exercise-fields { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; }
+    .field-card { background: var(--white); border: 1px solid var(--violet-pale); border-radius: 16px; padding: 14px 16px; }
+    .field-card strong { display: block; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet-core); margin-bottom: 4px; }
+    .field-card span { font-size: 13px; color: var(--text-muted); }
+    
+    .md-body p.lead { max-width: 820px; margin-top: 8px; }
+    .md-body ul.bullet-list { max-width: 820px; }
+    .md-body blockquote.md-quote {
+      font-family: var(--font-accent); font-style: italic; font-size: 18px; line-height: 1.5;
+      color: var(--violet-core); border-left: 3px solid var(--violet-pale); padding: 12px 0 12px 20px; margin: 12px 0; max-width: 720px;
+    }
+    .md-body h3.section { margin-top: 14px; }
+    .md-body h4.md-h4 { font-size: 14px; font-weight: 600; color: var(--violet-mid); margin: 12px 0 6px; letter-spacing: 0.06em; }
+    .slide-inner.top.md-body { justify-content: flex-start; padding-top: 52px; }
+    html, body { height: 100%; overflow: hidden; }
+    .top-bar { position: fixed; z-index: 50; }
+    .deck {
+      position: relative !important; width: 100% !important; height: 100vh !important;
+      margin: 0 !important; padding-top: 52px !important; box-sizing: border-box;
+      overflow-x: hidden !important; overflow-y: auto !important;
+      scroll-snap-type: y mandatory; scroll-behavior: smooth;
+    }
+    .deck .slide {
+      position: relative !important; inset: auto !important;
+      opacity: 1 !important; visibility: visible !important; transform: none !important;
+      min-height: calc(100vh - 52px); scroll-snap-align: start;
+      display: flex; flex-direction: column; z-index: auto !important;
+    }
+    .deck .slide .slide-inner { flex: 1; }
+    .nav-bar { display: none !important; }
+    .slide-nav {
+      flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 12px 48px 28px; border-top: 1px solid var(--border-soft); background: #fff;
+    }
+    .slide-link {
+      font-family: var(--font-body); font-size: 14px; font-weight: 600; text-decoration: none;
+      color: var(--midnight); padding: 12px 18px; border-radius: 8px; border: 1px solid var(--violet-pale);
+      min-width: 130px; text-align: center;
+    }
+    a.slide-link:hover { background: var(--violet-pale); }
+    .slide-link.primary { background: var(--violet-core); color: #fff; border-color: var(--violet-core); }
+    .slide-link.primary:hover { filter: brightness(1.05); }
+    .slide-link.ghost { visibility: hidden; pointer-events: none; }
+    .slide-num { font-size: 13px; color: var(--text-muted); }
+
+    @media (max-width: 960px) {
+      .slide-inner.split-layout { grid-template-columns: 1fr; padding-top: 56px; overflow-y: auto; }
+      .prompt-row, .compare, .visual-duo, .weak-grid, .stat-row, .tri-panel, .exercise-fields, .check-grid { grid-template-columns: 1fr; }
+      .top-bar, .nav-bar { padding-left: 20px; padding-right: 20px; }
+      .slide-inner { padding: 72px 24px 88px; }
+    }
+  
+    .visual-art.boot-cover { background: linear-gradient(165deg, #F7F6FF 0%, #7B62D4 50%, #2A1F5C 100%); }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="brand-row">
+      <span class="brand">I'M ROMA</span>
+      <span class="brand-sep"></span>
+      <span class="brand-meta">Bootcamp · Día 3</span>
+    </div>
+    <div class="status-pill"><span class="status-dot"></span> 2 h · desde MD v3</div>
+  </header>
+  <div class="deck" id="deck">
+    <section id="s0" class="slide">
+      <div class="slide-inner split-layout">
+        <div>
+          <p class="kicker">I'M ROMA · Bootcamp</p>
+          <h1 class="display">DÍA 3 — DE LOS CORTES AL ANUNCIO</h1>
+          <h3 class="section">Objetivo de la sesión</h3>
+          <p class="lead">Convertir los clips generados en un video terminado, con edición, sonido, voz, subtítulos y copy.</p>
+        </div>
+        <div class="visual-frame">
+          <div class="visual-art boot-cover" role="img" aria-hidden="true"></div>
+          <div class="overlay"><span class="tag-mini">En vivo</span><p class="cap">Desde el guion<br><span class="accent">al creativo</span></p></div>
+        </div>
+      </div>
+        <nav class="slide-nav">
+          <span class="slide-link ghost">← Anterior</span>
+          <span class="slide-num">1 / 13</span>
+          <a class="slide-link primary" href="#s1">Siguiente →</a>
+        </nav>
+    </section>
+    <section id="s1" class="slide">
+      <div class="slide-inner top md-body">
+        <p class="kicker">00:00 — 00:10</p>
+        <h2 class="slide-title">PREPARAR EL PROYECTO EN CAPCUT</h2>
+        <p class="lead">Crear un proyecto nuevo.</p>
+        <p class="lead">Importar los archivos desde el computador.</p>
+        <p class="lead">Organizar cada escena en la línea de tiempo según el guion.</p>
+      </div>
+        <nav class="slide-nav">
+          <a class="slide-link" href="#s0">← Anterior</a>
+          <span class="slide-num">2 / 13</span>
+          <a class="slide-link primary" href="#s2">Siguiente →</a>
+        </nav>
+    </section>
+    <section id="s2" class="slide">
+      <div class="slide-inner top md-body">
+        
+        <h2 class="slide-title">00:10 — 00:25</h2>
+        <h3 class="section">CONSTRUIR EL HOOK</h3>
+        <p class="lead">El hook es una de las partes más importantes del anuncio.</p>
+        <p class="lead">Los primeros segundos deben conectar con la necesidad o problema.</p>
+        <h3 class="section">Ejemplo de la torta</h3>
+        <p class="lead">La primera escena muestra a una persona entrenando con poca energía.</p>
+        <p class="lead">La intención es que la persona que tiene esa necesidad pueda reconocerse rápidamente.</p>
+        <p class="lead">No empezamos mostrando el producto simplemente porque es el producto.</p>
+      </div>
+        <nav class="slide-nav">
+          <a class="slide-link" href="#s1">← Anterior</a>
+          <span class="slide-num">3 / 13</span>
+          <a class="slide-link primary" href="#s3">Siguiente →</a>
+        </nav>
+    </section>
+    <section id="s3" class="slide">
+      <div class="slide-inner top md-body">
+        
+        <h2 class="slide-title">00:25 — 00:40</h2>
+        <h3 class="section">AUDIO Y VOZ</h3>
+        <p class="lead">Los audios originales de los clips generados pueden ser inconsistentes.</p>
+        <p class="lead">Por eso podemos silenciarlos y construir el audio directamente en CapCut.</p>
+        <p class="lead">Opciones:</p>
+        <ul class="bullet-list"><li>grabar la voz con micrófono;</li><li>utilizar texto a voz de CapCut;</li><li>incorporar efectos de sonido;</li><li>agregar música.</li></ul>
+      </div>
+        <nav class="slide-nav">
+          <a class="slide-link" href="#s2">← Anterior</a>
+          <span class="slide-num">4 / 13</span>
+          <a class="slide-link primary" href="#s4">Siguiente →</a>
+        </nav>
+    </section>
+    <section id="s4" class="slide">
+      <div class="slide-inner top md-body">
+        
+        <h2 class="slide-title">00:40 — 01:00</h2>
+        <h3 class="section">SUBTÍTULOS Y TEXTOS</h3>
+        <p class="lead">Agregar subtítulos de forma clara y legible.</p>
+        <p class="lead">Se puede trabajar con estilos básicos y animaciones sencillas.</p>
+        <h3 class="section">Edición independiente</h3>
+        <p class="lead">Cuando se modifica un bloque de subtítulos, CapCut ofrece una opción para aplicar la modificación a todos los subtítulos.</p>
+        <p class="lead">Si queremos modificar cada bloque de manera independiente, debemos desactivar esa aplicación general.</p>
+        <h3 class="section">Revisar siempre</h3>
+        <p class="lead">La IA puede cometer errores de escritura.</p>
+        <p class="lead">Corregir:</p>
+        <ul class="bullet-list"><li>palabras;</li><li>tildes;</li><li>signos;</li><li>nombres;</li><li>términos específicos.</li></ul>
+        <p class="lead">Utilizar tipografías que soporten correctamente los acentos.</p>
+      </div>
+        <nav class="slide-nav">
+          <a class="slide-link" href="#s3">← Anterior</a>
+          <span class="slide-num">5 / 13</span>
+          <a class="slide-link primary" href="#s5">Siguiente →</a>
+        </nav>
+    </section>
+    <section id="s5" class="slide">
+      <div class="slide-inner top md-body">
+        
+        <h2 class="slide-title">01:00 — 01:15</h2>
+        <h3 class="section">DISEÑO DEL SONIDO</h3>
+        <p class="lead">Los efectos deben responder a lo que ocurre.</p>
+        <p class="lead">Ejemplos:</p>
+        <ul class="bullet-list"><li>algo cae → sonido de caída;</li><li>algo se abre → sonido de apertura;</li><li>aparece un elemento → sonido que acompañe la aparición;</li><li>cambio de escena → transición sonora si realmente aporta.</li></ul>
+        <p class="lead">La música también debe responder a la narrativa.</p>
+        <p class="lead">Se pueden buscar referencias según el tono:</p>
+        <ul class="bullet-list"><li>mysterious;</li><li>emotional;</li><li>epic;</li><li>reflective.</li></ul>
+        <p class="lead">El sonido no debe estar ahí solamente para llenar espacio.</p>
+      </div>
+        <nav class="slide-nav">
+          <a class="slide-link" href="#s4">← Anterior</a>
+          <span class="slide-num">6 / 13</span>
+          <a class="slide-link primary" href="#s6">Siguiente →</a>
+        </nav>
+    </section>
+    <section id="s6" class="slide">
+      <div class="slide-inner top md-body">
+        
+        <h2 class="slide-title">01:15 — 01:30</h2>
+        <h3 class="section">TRANSICIONES Y SUPERPOSICIONES</h3>
+        <p class="lead">Las transiciones deben ser suaves y tener una función.</p>
+        <p class="lead">Se pueden utilizar:</p>
+        <ul class="bullet-list"><li>zoom;</li><li>movimiento;</li><li>fade;</li><li>combinación de movimientos.</li></ul>
+        <p class="lead">Evitar transiciones exageradas que compitan con el contenido.</p>
+        <h3 class="section">Superposiciones</h3>
+        <p class="lead">Se pueden colocar imágenes o clips encima de la línea principal, en una segunda capa.</p>
+        <p class="lead">Sirven para reforzar visualmente lo que se está diciendo en la voz.</p>
+        <p class="lead">Ejemplo:</p>
+        <p class="lead">Si la voz menciona una herramienta, se puede mostrar una imagen o clip de esa herramienta como apoyo.</p>
+      </div>
+        <nav class="slide-nav">
+          <a class="slide-link" href="#s5">← Anterior</a>
+          <span class="slide-num">7 / 13</span>
+          <a class="slide-link primary" href="#s7">Siguiente →</a>
+        </nav>
+    </section>
+    <section id="s7" class="slide">
+      <div class="slide-inner top md-body">
+        
+        <h2 class="slide-title">01:30 — 01:40</h2>
+        <h3 class="section">PAUSA</h3>
+        <p class="lead">10 minutos.</p>
+      </div>
+        <nav class="slide-nav">
+          <a class="slide-link" href="#s6">← Anterior</a>
+          <span class="slide-num">8 / 13</span>
+          <a class="slide-link primary" href="#s8">Siguiente →</a>
+        </nav>
+    </section>
+    <section id="s8" class="slide">
+      <div class="slide-inner top md-body">
+        
+        <h2 class="slide-title">01:40 — 01:50</h2>
+        <h3 class="section">REVISIÓN DEL ANUNCIO</h3>
+        <p class="lead">Reproducir el video completo.</p>
+        <p class="lead">Revisar:</p>
+        <ul class="bullet-list"><li>hook;</li><li>ritmo;</li><li>orden;</li><li>continuidad;</li><li>voz;</li><li>subtítulos;</li><li>ortografía;</li><li>efectos;</li><li>música;</li><li>transiciones;</li><li>CTA;</li><li>duración.</li></ul>
+        <p class="lead">La pregunta final:</p>
+        <p class="lead"><strong>¿El video funciona como anuncio o solamente se ve bonito?</strong></p>
+      </div>
+        <nav class="slide-nav">
+          <a class="slide-link" href="#s7">← Anterior</a>
+          <span class="slide-num">9 / 13</span>
+          <a class="slide-link primary" href="#s9">Siguiente →</a>
+        </nav>
+    </section>
+    <section id="s9" class="slide">
+      <div class="slide-inner top md-body">
+        
+        <h2 class="slide-title">01:50 — 02:00</h2>
+        <h3 class="section">EXPORTACIÓN Y COPY</h3>
+        <h3 class="section">Exportación</h3>
+        <p class="lead">Exportar el video en:</p>
+        <ul class="bullet-list"><li>1080;</li><li>MP4;</li><li>nombre de archivo claro.</li></ul>
+      </div>
+        <nav class="slide-nav">
+          <a class="slide-link" href="#s8">← Anterior</a>
+          <span class="slide-num">10 / 13</span>
+          <a class="slide-link primary" href="#s10">Siguiente →</a>
+        </nav>
+    </section>
+    <section id="s10" class="slide">
+      <div class="slide-inner top md-body">
+        
+        <h2 class="slide-title">COPY QUE ACOMPAÑA EL VIDEO</h2>
+        <p class="lead">El copy no debe repetir lo que ya dice el video.</p>
+        <p class="lead">Su función es complementar y ampliar la información.</p>
+        <h3 class="section">Estructura</h3>
+        <h3 class="section">HOOK</h3>
+        <p class="lead">Son las primeras palabras que la persona va a leer.</p>
+        <p class="lead">Debe conectar realmente con el problema, deseo o situación.</p>
+        <h3 class="section">DESARROLLO</h3>
+        <p class="lead">Complementa la información del video.</p>
+        <p class="lead">No debe transcribirlo.</p>
+        <h3 class="section">CTA</h3>
+        <p class="lead">Debe pedir una acción concreta.</p>
+        <p class="lead">Ejemplos:</p>
+        <ul class="bullet-list"><li>guardar el video;</li><li>escribir una palabra;</li><li>visitar un enlace;</li><li>pedir información;</li><li>comprar.</li></ul>
+        <p class="lead">El CTA debe dirigir la siguiente acción sin repetir innecesariamente lo que ya apareció en el video.</p>
+      </div>
+        <nav class="slide-nav">
+          <a class="slide-link" href="#s9">← Anterior</a>
+          <span class="slide-num">11 / 13</span>
+          <a class="slide-link primary" href="#s11">Siguiente →</a>
+        </nav>
+    </section>
+    <section id="s11" class="slide">
+      <div class="slide-inner top md-body">
+        
+        <h2 class="slide-title">ENTREGABLE FINAL DEL BOOTCAMP</h2>
+        <p class="lead">Al terminar los tres días, cada participante debe tener:</p>
+        <ul class="bullet-list"><li>idea definida;</li><li>público y necesidad;</li><li>guion AIDA;</li><li>estructura de escenas;</li><li>decisiones audiovisuales;</li><li>prompts;</li><li>imágenes de referencia;</li><li>clips generados con IA;</li><li>video editado en CapCut;</li><li>voz y/o subtítulos;</li><li>sonido y música;</li><li>CTA;</li><li>copy para acompañar el video;</li><li>creativo final listo para publicar o utilizar como anuncio.</li></ul>
+      </div>
+        <nav class="slide-nav">
+          <a class="slide-link" href="#s10">← Anterior</a>
+          <span class="slide-num">12 / 13</span>
+          <a class="slide-link primary" href="#s12">Siguiente →</a>
+        </nav>
+    </section>
+    <section id="s12" class="slide">
+      <div class="slide-inner top md-body">
+        
+        <h2 class="slide-title">PRINCIPIO CENTRAL DEL BOOTCAMP</h2>
+        <p class="lead">No se trata de aprender a pedirle cosas bonitas a una herramienta.</p>
+        <p class="lead">Se trata de aprender:</p>
+        <p class="lead"><strong>qué quieres comunicar, cómo quieres mostrarlo, qué debes pedirle a la IA y qué hacer con el resultado.</strong></p>
+        <p class="lead">La IA produce.</p>
+        <p class="lead">La estrategia decide.</p>
+      </div>
+        <nav class="slide-nav">
+          <a class="slide-link" href="#s11">← Anterior</a>
+          <span class="slide-num">13 / 13</span>
+          <span class="slide-link ghost">Siguiente →</span>
+        </nav>
+    </section>
+  </div>
+  <p style="position:fixed;bottom:4px;right:8px;font-size:10px;color:#8B8BA8;margin:0;z-index:60;">Sin JavaScript · usa enlaces Siguiente →</p>
+</body>
+</html>
